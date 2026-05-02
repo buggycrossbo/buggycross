@@ -25,6 +25,31 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #222;
+      <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">BUGGYCROSS</div>
+    
+    <div class="nav-links">
+      <a href="#inicio">Inicio</a>
+      <a href="#quienes-somos">Quiénes Somos</a>
+      <a href="#que-hacemos">Qué Hacemos</a>
+      <a href="#mision">Misión & Visión</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    
+    <button class="btn-primary" onclick="abrirChat()">Consultar</button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#inicio">Inicio</a>
+    <a href="#quienes-somos">Quiénes Somos</a>
+    <a href="#que-hacemos">Qué Hacemos</a>
+    <a href="#mision">Misión & Visión</a>
+    <a href="#contacto">Contacto</a>
+  </div>
     }
     .logo { font-size: 2rem; font-weight: 700; color: var(--primary); letter-spacing: 3px; }
     .nav-links a {
