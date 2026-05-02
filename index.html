@@ -3,31 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buggycross - Aventura 4x4</title>
+  <title>Buggycross - Aventura 4x4 & Hidroponía</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <div class="hero">
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-content">
       <h1>BUGGYCROSS</h1>
-      <p class="tagline">Vive la aventura en nuestra pista todoterreno</p>
+      <p class="tagline">Aventura extrema en pista todoterreno • Hidroponía viva</p>
       <button class="btn" onclick="abrirChat()">Consultar precios y horarios</button>
     </div>
   </header>
 
-  <section class="section buggy">
-    <h2>Nuestros Buggies</h2>
-    <p>Alquila tu buggy individual y disfruta de la pista a tu ritmo. Vehículos de una sola persona para máxima diversión y adrenalina.</p>
+  <!-- Buggies -->
+  <section class="section buggies">
+    <div class="container">
+      <h2>Nuestros Buggies</h2>
+      <p class="section-desc">Alquila tu propio buggy individual y vive la adrenalina recorriendo nuestra pista profesional a tu ritmo.</p>
+      <div class="features">
+        <div class="feature">Vehículos de una sola persona</div>
+        <div class="feature">Pista todoterreno profesional</div>
+        <div class="feature">Alquiler por tiempo o vueltas</div>
+      </div>
+    </div>
   </section>
 
-  <section class="section hidro">
-    <h2>Hidroponía</h2>
-    <p>Visita nuestro invernadero hidropónico. Conoce el sistema y adquiere productos frescos cultivados en el lugar.</p>
+  <!-- Hidroponía -->
+  <section class="section hidroponia">
+    <div class="container">
+      <h2>Hidroponía Viva</h2>
+      <p class="section-desc">Conoce nuestro moderno sistema de cultivo hidropónico y adquiere productos frescos cultivados en el lugar.</p>
+      <div class="features">
+        <div class="feature">Visitas guiadas</div>
+        <div class="feature">Venta de productos frescos</div>
+        <div class="feature">Tecnología de cultivo sin tierra</div>
+      </div>
+    </div>
   </section>
 
-  <div class="chat-btn" onclick="abrirChat()">
-    💬
-  </div>
+  <!-- Chat Button -->
+  <div class="chat-btn" onclick="abrirChat()">💬</div>
 
   <script src="script.js"></script>
 </body>
