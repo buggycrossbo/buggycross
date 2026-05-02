@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: #0a0a0a;
+  color: #fff;
+}
+
+.hero {
+  height: 100vh;
+  background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('https://picsum.photos/2000/1200') center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+h1 {
+  font-size: 4.5rem;
+  letter-spacing: 8px;
+  margin-bottom: 10px;
+}
+
+.tagline {
+  font-size: 1.4rem;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+.btn {
+  padding: 16px 40px;
+  font-size: 1.1rem;
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  background-color: #ff8533;
+  transform: scale(1.05);
+}
+
+.section {
+  padding: 90px 20px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.buggy { background-color: #111; }
+.hidro { background-color: #0f1a0f; }
+
+h2 {
+  font-size: 2.8rem;
+  margin-bottom: 20px;
+}
+
+.chat-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 70px;
+  height: 70px;
+  background-color: #ff6600;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 5px 20px rgba(255, 102, 0, 0.4);
+  cursor: pointer;
+  z-index: 100;
+}
