@@ -1,82 +1,134 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background-color: #0a0a0a;
-  color: #fff;
+    font-family: 'Roboto', sans-serif;
+    background-color: #0a0a0a;
+    color: #ffffff;
+    line-height: 1.6;
 }
 
+/* Hero */
 .hero {
-  height: 100vh;
-  background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('https://picsum.photos/2000/1200') center/cover no-repeat;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), 
+                url('https://picsum.photos/id/1015/2000/1200') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
 }
 
-h1 {
-  font-size: 4.5rem;
-  letter-spacing: 8px;
-  margin-bottom: 10px;
+.hero-content h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 5.5rem;
+    font-weight: 700;
+    letter-spacing: 12px;
+    margin-bottom: 15px;
+    color: #ff6600;
 }
 
 .tagline {
-  font-size: 1.4rem;
-  margin-bottom: 40px;
-  opacity: 0.9;
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    opacity: 0.95;
+    font-weight: 400;
 }
 
 .btn {
-  padding: 16px 40px;
-  font-size: 1.1rem;
-  background-color: #ff6600;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s;
+    padding: 16px 42px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.4s ease;
 }
 
 .btn:hover {
-  background-color: #ff8533;
-  transform: scale(1.05);
+    background-color: #ff8533;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(255, 102, 0, 0.4);
 }
 
+/* Secciones */
 .section {
-  padding: 90px 20px;
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
+    padding: 100px 20px;
+    text-align: center;
 }
 
-.buggy { background-color: #111; }
-.hidro { background-color: #0f1a0f; }
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
 
 h2 {
-  font-size: 2.8rem;
-  margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #ff6600;
 }
 
+.section-desc {
+    font-size: 1.25rem;
+    max-width: 700px;
+    margin: 0 auto 40px;
+    opacity: 0.9;
+}
+
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.feature {
+    background-color: rgba(255, 102, 0, 0.1);
+    padding: 20px 30px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border: 1px solid rgba(255, 102, 0, 0.2);
+    min-width: 220px;
+}
+
+/* Colores por sección */
+.buggies {
+    background-color: #111111;
+}
+
+.hidroponia {
+    background-color: #0f1a0f;
+}
+
+/* Botón del chat */
 .chat-btn {
-  position: fixed;
-  bottom: 25px;
-  right: 25px;
-  width: 70px;
-  height: 70px;
-  background-color: #ff6600;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  box-shadow: 0 5px 20px rgba(255, 102, 0, 0.4);
-  cursor: pointer;
-  z-index: 100;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 70px;
+    height: 70px;
+    background-color: #ff6600;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 8px 25px rgba(255, 102, 0, 0.5);
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s;
+}
+
+.chat-btn:hover {
+    transform: scale(1.1);
+    background-color: #ff8533;
 }
