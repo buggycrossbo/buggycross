@@ -5,27 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buggycross - Aventura 4x4 & Hidroponía</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #ff6600;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Roboto', sans-serif; background: #0a0a0a; color: #fff; }
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    /* Navbar */
-    .navbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(10,10,10,0.95);
-      backdrop-filter: blur(10px);
-      z-index: 1000;
-      padding: 15px 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #222;
-      <!-- Navbar -->
+  <!-- Navbar -->
   <nav class="navbar">
     <div class="logo">BUGGYCROSS</div>
     
@@ -44,153 +28,19 @@
 
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobile-menu">
-    <a href="#inicio">Inicio</a>
-    <a href="#quienes-somos">Quiénes Somos</a>
-    <a href="#que-hacemos">Qué Hacemos</a>
-    <a href="#mision">Misión & Visión</a>
-    <a href="#contacto">Contacto</a>
+    <a href="#inicio" onclick="toggleMenu()">Inicio</a>
+    <a href="#quienes-somos" onclick="toggleMenu()">Quiénes Somos</a>
+    <a href="#que-hacemos" onclick="toggleMenu()">Qué Hacemos</a>
+    <a href="#mision" onclick="toggleMenu()">Misión & Visión</a>
+    <a href="#contacto" onclick="toggleMenu()">Contacto</a>
   </div>
-    }
-    .logo { font-size: 2rem; font-weight: 700; color: var(--primary); letter-spacing: 3px; }
-    .nav-links a {
-      color: #fff;
-      text-decoration: none;
-      margin: 0 15px;
-      font-weight: 500;
-      transition: color 0.3s;
-    }
-    .nav-links a:hover { color: var(--primary); }
 
-    /* Hero + Slideshow */
-    .hero {
-      height: 100vh;
-      position: relative;
-      overflow: hidden;
-    }
-    .slide {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      opacity: 0;
-      transition: opacity 1.5s ease;
-    }
-    .slide.active { opacity: 1; }
-    .hero-overlay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      z-index: 2;
-    }
-    .hero-overlay h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 5.5rem;
-      color: var(--primary);
-      letter-spacing: 8px;
-    }
-    .tagline { font-size: 1.8rem; margin: 20px 0 40px; }
-    .btn-primary {
-      padding: 16px 45px;
-      font-size: 1.2rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .btn-primary:hover { background: #ff8533; transform: scale(1.05); }
-
-    /* Quick Cards */
-    .quick-section {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      padding: 60px 20px;
-      background: #111;
-      flex-wrap: wrap;
-    }
-    .quick-card {
-      background: #1a1a1a;
-      padding: 30px;
-      border-radius: 15px;
-      width: 380px;
-      text-align: center;
-      border: 1px solid #333;
-    }
-
-    /* Secciones */
-    .section {
-      padding: 100px 8%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 3rem;
-      text-align: center;
-      margin-bottom: 50px;
-      color: var(--primary);
-    }
-
-    /* Contacto */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 50px;
-    }
-    .map {
-      height: 400px;
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-    .chat-btn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 70px;
-      height: 70px;
-      background: var(--primary);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      box-shadow: 0 10px 30px rgba(255,102,0,0.5);
-      cursor: pointer;
-      z-index: 2000;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo">BUGGYCROSS</div>
-    <div class="nav-links">
-      <a href="#inicio">Inicio</a>
-      <a href="#quienes-somos">Quiénes Somos</a>
-      <a href="#que-hacemos">Qué Hacemos</a>
-      <a href="#mision">Misión & Visión</a>
-      <a href="#contacto">Contacto</a>
-    </div>
-    <button class="btn-primary" onclick="abrirChat()">💬 Consultar</button>
-  </nav>
-
-  <!-- Hero Slideshow -->
+  <!-- Hero -->
   <section id="inicio" class="hero">
     <div class="slide active" style="background-image: url('https://picsum.photos/id/1015/2000/1200')"></div>
     <div class="slide" style="background-image: url('https://picsum.photos/id/133/2000/1200')"></div>
     <div class="slide" style="background-image: url('https://picsum.photos/id/201/2000/1200')"></div>
     <div class="slide" style="background-image: url('https://picsum.photos/id/251/2000/1200')"></div>
-    <div class="slide" style="background-image: url('https://picsum.photos/id/160/2000/1200')"></div>
 
     <div class="hero-overlay">
       <h1>BUGGYCROSS</h1>
@@ -203,85 +53,38 @@
   <section class="quick-section">
     <div class="quick-card">
       <h3>🏎️ Buggies Todo Terreno</h3>
-      <p>Alquila tu buggy individual y vive la adrenalina en nuestra pista profesional.</p>
+      <p>Alquila tu buggy individual y vive la adrenalina.</p>
     </div>
     <div class="quick-card">
       <h3>🌱 Hidroponía Viva</h3>
-      <p>Visita nuestro invernadero y conoce productos frescos cultivados sin tierra.</p>
+      <p>Visitas y productos frescos cultivados en el lugar.</p>
     </div>
   </section>
 
-  <!-- Quiénes Somos -->
+  <!-- Secciones -->
   <section id="quienes-somos" class="section">
     <h2>Quiénes Somos</h2>
-    <p style="font-size:1.25rem; text-align:center; max-width:800px; margin:0 auto;">
-      Somos un emprendimiento familiar apasionado por la aventura y la sostenibilidad. 
-      Combinamos la emoción de los deportes extremos con tecnología agrícola moderna en un mismo lugar.
-    </p>
+    <p>Somos un emprendimiento familiar que combina aventura extrema con agricultura sostenible.</p>
   </section>
 
-  <!-- Qué Hacemos -->
-  <section id="que-hacemos" class="section" style="background:#111;">
+  <section id="que-hacemos" class="section">
     <h2>Qué Hacemos</h2>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:40px;">
-      <div><h3>Alquiler de Buggies</h3><p>Vehículos individuales para disfrutar la pista a tu ritmo.</p></div>
-      <div><h3>Experiencias de Adrenalina</h3><p>Pista todoterreno diseñada para máxima diversión y seguridad.</p></div>
-      <div><h3>Hidroponía</h3><p>Visitas educativas y venta de vegetales y hierbas frescas.</p></div>
-    </div>
+    <p>Alquiler de buggies individuales y visitas a nuestro sistema hidropónico.</p>
   </section>
 
-  <!-- Misión y Visión -->
   <section id="mision" class="section">
     <h2>Misión & Visión</h2>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(400px,1fr)); gap:40px; text-align:center;">
-      <div>
-        <h3>Misión</h3>
-        <p>Ofrecer experiencias únicas de aventura y educación ambiental en un mismo espacio.</p>
-      </div>
-      <div>
-        <h3>Visión</h3>
-        <p>Ser el referente de turismo de aventura y agricultura sostenible en la región.</p>
-      </div>
-    </div>
+    <p>Crear experiencias únicas de diversión y educación ambiental.</p>
   </section>
 
-  <!-- Contacto -->
-  <section id="contacto" class="section" style="background:#111;">
-    <h2>Contáctanos</h2>
-    <div class="contact-grid">
-      <div>
-        <h3>¿Cómo llegar?</h3>
-        <p><strong>Dirección:</strong> [Escribe aquí tu dirección completa]</p>
-        <p><strong>Teléfono:</strong> [Tu número]</p>
-        <p><strong>Horario:</strong> [Escribe tus horarios]</p>
-      </div>
-      <div class="map">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d... [PEGA AQUÍ TU ENLACE DE GOOGLE MAPS]" 
-                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-      </div>
-    </div>
+  <section id="contacto" class="section">
+    <h2>Contacto</h2>
+    <p>Próximamente agregaremos mapa y formulario.</p>
   </section>
 
   <!-- Chat Button -->
   <div class="chat-btn" onclick="abrirChat()">💬</div>
 
-  <script>
-    // Slideshow automático
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-
-    function nextSlide() {
-      slides[currentSlide].classList.remove('active');
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add('active');
-    }
-
-    setInterval(nextSlide, 3000);
-
-    // Chat (versión básica)
-    function abrirChat() {
-      alert("Chat con IA activado.\n\nEn la próxima versión conectaremos la inteligencia artificial real.");
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
