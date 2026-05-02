@@ -20,7 +20,7 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(10, 10, 10, 0.95);
+    background: rgba(10, 10, 10, 0.98);
     backdrop-filter: blur(10px);
     z-index: 1000;
     padding: 15px 5%;
@@ -31,25 +31,34 @@ body {
 }
 
 .logo {
-    font-size: 2.1rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary);
-    letter-spacing: 4px;
+    letter-spacing: 3px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
 }
 
 .nav-links a {
     color: #fff;
     text-decoration: none;
-    margin: 0 18px;
     font-weight: 500;
-    transition: color 0.3s;
 }
 
-.nav-links a:hover {
-    color: var(--primary);
+.btn-primary {
+    padding: 12px 28px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
 }
 
-/* Hero + Slideshow */
+/* Hero */
 .hero {
     height: 100vh;
     position: relative;
@@ -58,19 +67,16 @@ body {
 
 .slide {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     width: 100%;
     height: 100%;
     background-size: cover;
     background-position: center;
     opacity: 0;
-    transition: opacity 1.8s ease;
+    transition: opacity 1.8s;
 }
 
-.slide.active {
-    opacity: 1;
-}
+.slide.active { opacity: 1; }
 
 .hero-overlay {
     position: absolute;
@@ -79,98 +85,98 @@ body {
     transform: translate(-50%, -50%);
     text-align: center;
     z-index: 10;
+    padding: 0 20px;
 }
 
 .hero-overlay h1 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 5.8rem;
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
     color: var(--primary);
-    letter-spacing: 10px;
-    margin-bottom: 10px;
+    letter-spacing: 6px;
 }
 
 .tagline {
-    font-size: 1.75rem;
-    margin-bottom: 40px;
-    font-weight: 400;
-}
-
-.btn-primary {
-    padding: 16px 48px;
-    font-size: 1.2rem;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.4s;
-}
-
-.btn-primary:hover {
-    background: #ff8533;
-    transform: scale(1.08);
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    margin: 20px 0 35px;
 }
 
 /* Quick Section */
 .quick-section {
     display: flex;
-    justify-content: center;
-    gap: 40px;
-    padding: 80px 20px;
-    background: #111111;
     flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    padding: 70px 20px;
+    background: #111;
 }
 
 .quick-card {
     background: #1a1a1a;
-    padding: 35px 30px;
+    padding: 30px 25px;
     border-radius: 16px;
-    width: 380px;
+    width: 100%;
+    max-width: 380px;
     text-align: center;
     border: 1px solid #333;
-    transition: transform 0.3s;
 }
 
-.quick-card:hover {
-    transform: translateY(-10px);
-}
-
-/* Secciones generales */
+/* Secciones */
 .section {
-    padding: 110px 8%;
+    padding: 90px 6%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 h2 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 3.2rem;
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
     color: var(--primary);
 }
 
 /* Chat Button */
 .chat-btn {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 75px;
-    height: 75px;
+    bottom: 25px;
+    right: 25px;
+    width: 65px;
+    height: 65px;
     background: var(--primary);
     color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 34px;
-    box-shadow: 0 10px 35px rgba(255, 102, 0, 0.5);
-    cursor: pointer;
+    font-size: 30px;
+    box-shadow: 0 8px 25px rgba(255,102,0,0.5);
     z-index: 2000;
-    transition: all 0.3s;
 }
 
-.chat-btn:hover {
-    transform: scale(1.15);
+/* ==================== CHAT ==================== */
+#chat-container {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 90%;
+    max-width: 380px;
+    height: 520px;
+    background: #1a1a1a;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+    display: flex;
+    flex-direction: column;
+    z-index: 3000;
+    border: 1px solid #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* Podemos mejorar esto después con menú hamburguesa */
+    }
+    
+    .hero-overlay h1 {
+        letter-spacing: 3px;
+    }
 }
