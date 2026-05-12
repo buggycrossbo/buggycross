@@ -1,4 +1,8 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -6,16 +10,18 @@ body {
     color: #eee;
 }
 
+/* ==================== NAVBAR ==================== */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(10,10,10,0.95);
-    padding: 20px 5%;
+    background: rgba(10,10,10,0.98);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    padding: 18px 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 1000;
     border-bottom: 1px solid #333;
 }
 
@@ -26,18 +32,56 @@ body {
     letter-spacing: 3px;
 }
 
+/* Menú en computadora */
+.nav-links {
+    display: flex;
+    gap: 35px;
+    align-items: center;
+}
+
 .nav-links a {
     color: white;
     text-decoration: none;
-    margin-left: 35px;
     font-weight: 500;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    transition: color 0.3s;
 }
 
 .nav-links a:hover {
     color: #ff3b00;
 }
 
+/* Hamburguesa (solo en móvil) */
+.hamburger {
+    display: none;
+    font-size: 32px;
+    cursor: pointer;
+    color: white;
+}
+
+/* Menú móvil */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: #0a0a0a;
+    flex-direction: column;
+    padding: 25px;
+    gap: 20px;
+    border-top: 1px solid #333;
+    z-index: 999;
+}
+
+.mobile-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.3rem;
+    padding: 10px 0;
+}
+
+/* ==================== HERO Y DEMÁS ==================== */
 .hero {
     height: 100vh;
     background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://picsum.photos/id/1015/2000/1200') center/cover;
@@ -48,33 +92,29 @@ body {
 }
 
 .hero-content h1 {
-    font-size: 4.2rem;
-    margin-bottom: 20px;
+    font-size: clamp(2.8rem, 8vw, 4.5rem);
     color: #ff3b00;
+    margin-bottom: 20px;
 }
 
 .btn-primary {
     background: #ff3b00;
     color: white;
-    padding: 18px 45px;
+    padding: 16px 40px;
     border: none;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
     margin-top: 30px;
 }
 
-.section {
-    padding: 120px 10%;
-    text-align: center;
-}
-
-.section.dark {
-    background: #111;
-}
-
-h2 {
-    font-size: 3rem;
-    color: #ff3b00;
-    margin-bottom: 30px;
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+    
+    .hamburger {
+        display: block;
+    }
 }
