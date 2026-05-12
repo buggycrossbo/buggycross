@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto - Buggycross Bolivia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">BUGGYCROSS</div>
+    <div class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="quienes-somos.html">Quiénes Somos</a>
+      <a href="buggies.html">Nuestros Buggies</a>
+      <a href="hidroponia.html">Hidroponía</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html">Inicio</a>
+    <a href="quienes-somos.html">Quiénes Somos</a>
+    <a href="buggies.html">Nuestros Buggies</a>
+    <a href="hidroponia.html">Hidroponía</a>
+    <a href="contacto.html">Contacto</a>
+  </div>
+
+  <section class="section">
+    <h2>¿Listo para la aventura?</h2>
+    <p>Contáctanos y reserva tu vuelta en la pista más extrema de Bolivia.</p>
+
+    <div class="contact-form" style="max-width: 600px; margin: 50px auto;">
+      <input type="text" id="nombre" placeholder="Tu nombre" style="width:100%; padding:15px; margin-bottom:15px; background:#222; border:none; color:white;">
+      <input type="tel" id="telefono" placeholder="Tu número de WhatsApp" style="width:100%; padding:15px; margin-bottom:15px; background:#222; border:none; color:white;">
+      <textarea id="mensaje" placeholder="¿Qué aventura estás buscando?" style="width:100%; padding:15px; height:120px; background:#222; border:none; color:white;"></textarea>
+      <button onclick="enviarMensaje()" class="btn-primary" style="width:100%; margin-top:20px;">ENVIAR MENSAJE POR WHATSAPP</button>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
