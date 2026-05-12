@@ -49,9 +49,9 @@
   <section class="section">
     <h2>Contáctanos y Reserva tu Aventura</h2>
     <p>Horario de atención:<br>
-    Miércoles a Viernes: 15:00 - 18:30<br>
-    Sábados y Domingos: 09:00 - 17:30<br>
-    <strong>Lunes y Martes: Cerrado</strong></p>
+    <strong>Miércoles a Viernes:</strong> 15:00 - 18:30<br>
+    <strong>Sábados y Domingos:</strong> 09:00 - 17:30<br>
+    <strong>Lunes y Martes:</strong> Cerrado</p>
 
     <form action="https://formspree.io/f/xjglllva" method="POST" class="contact-form" id="reservaForm">
       <input type="text" name="nombre" placeholder="Tu nombre completo" required>
@@ -80,21 +80,18 @@
 
       fechaInput.addEventListener('change', function() {
         const selectedDate = new Date(this.value);
-        const day = selectedDate.getDay(); // 0=Domingo, 1=Lunes, 2=Martes, 3=Miércoles...
+        const day = selectedDate.getDay();   // 0=Domingo, 1=Lunes, 2=Martes, 3=Miércoles...
 
-        if (day === 1 || day === 2) { 
+        if (day === 1 || day === 2) {
           alert("Lo sentimos, no trabajamos los lunes ni martes.");
           this.value = '';
           return;
         }
 
-        // Miércoles a Viernes (días 3,4,5)
-        if (day >= 3 && day <= 5) {
+        if (day >= 3 && day <= 5) {        // Miércoles, Jueves, Viernes
           horaInput.setAttribute('min', '15:00');
           horaInput.setAttribute('max', '18:30');
-        } 
-        // Sábado (6) y Domingo (0)
-        else {
+        } else {                           // Sábado y Domingo
           horaInput.setAttribute('min', '09:00');
           horaInput.setAttribute('max', '17:30');
         }
