@@ -10,24 +10,25 @@ body {
     color: #eee;
 }
 
-/* NAVBAR */
+/* NAVBAR SIMPLE Y FUNCIONAL */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(10,10,10,0.98);
+    background: #000;
     z-index: 1000;
-    padding: 18px 5%;
+    padding: 20px 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #333;
+    border-bottom: 2px solid #ff3b00;
 }
 
 .logo {
     font-size: 28px;
     font-weight: 900;
     color: #ff3b00;
+    letter-spacing: 2px;
 }
 
 .nav-links {
@@ -38,57 +39,21 @@ body {
 .nav-links a {
     color: white;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 1.1rem;
 }
 
-/* Menú Hamburguesa */
-.hamburger {
-    display: none;
-    font-size: 32px;
-    cursor: pointer;
-}
-
-/* Menú en móvil */
-.mobile-menu {
-    display: none;
-    position: fixed;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    background: #0a0a0a;
-    flex-direction: column;
-    padding: 25px;
-    gap: 20px;
-    border-top: 1px solid #333;
-}
-
-.mobile-menu a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.3rem;
-}
-
-/* HERO */
-.hero {
-    height: 100vh;
-    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.85)), url('https://picsum.photos/id/1015/2000/1200') center/cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.hero-content h1 {
-    font-size: clamp(2.5rem, 7vw, 4.5rem);
+.nav-links a:hover {
     color: #ff3b00;
 }
 
-/* Responsive - MÓVIL */
+/* Móvil */
 @media (max-width: 768px) {
     .nav-links {
-        display: none;
+        gap: 20px;
     }
-    .hamburger {
-        display: block;
+    
+    .nav-links a {
+        font-size: 1rem;
     }
 }
