@@ -29,15 +29,18 @@
   </div>
 
   <section class="section">
-    <h2>¿Listo para la aventura?</h2>
-    <p>Contáctanos y reserva tu vuelta en la pista más extrema de Bolivia.</p>
+    <h2>Contáctanos y Reserva</h2>
+    <p>Completa el formulario y te responderemos confirmando tu reserva lo antes posible.</p>
 
-    <div class="contact-form" style="max-width: 600px; margin: 50px auto;">
-      <input type="text" id="nombre" placeholder="Tu nombre" style="width:100%; padding:15px; margin-bottom:15px; background:#222; border:none; color:white;">
-      <input type="tel" id="telefono" placeholder="Tu número de WhatsApp" style="width:100%; padding:15px; margin-bottom:15px; background:#222; border:none; color:white;">
-      <textarea id="mensaje" placeholder="¿Qué aventura estás buscando?" style="width:100%; padding:15px; height:120px; background:#222; border:none; color:white;"></textarea>
-      <button onclick="enviarMensaje()" class="btn-primary" style="width:100%; margin-top:20px;">ENVIAR MENSAJE POR WHATSAPP</button>
-    </div>
+    <form action="https://formspree.io/f/xjglllva" method="POST" class="contact-form">
+      <input type="text" name="nombre" placeholder="Tu nombre completo" required>
+      <input type="email" name="email" placeholder="Tu correo electrónico" required>
+      <input type="tel" name="whatsapp" placeholder="Tu número de WhatsApp" required>
+      <input type="number" name="personas" placeholder="Cantidad de personas" min="1" required>
+      <textarea name="mensaje" rows="5" placeholder="¿Qué fecha te interesa? ¿Alguna duda o preferencia?" required></textarea>
+      
+      <button type="submit" class="btn-primary">ENVIAR MENSAJE</button>
+    </form>
   </section>
 
   <script src="script.js"></script>
