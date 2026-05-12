@@ -1,17 +1,23 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     font-family: 'Roboto', sans-serif;
     background: #0a0a0a;
     color: #eee;
+    line-height: 1.6;
 }
 
-/* Navbar */
+/* ==================== NAVBAR ==================== */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
     background: rgba(10,10,10,0.98);
+    backdrop-filter: blur(10px);
     z-index: 1000;
     padding: 18px 5%;
     display: flex;
@@ -24,6 +30,7 @@ body {
     font-size: 28px;
     font-weight: 900;
     color: #ff3b00;
+    letter-spacing: 3px;
 }
 
 .nav-links {
@@ -35,8 +42,15 @@ body {
     color: white;
     text-decoration: none;
     font-weight: 600;
+    font-size: 1.08rem;
+    transition: color 0.3s;
 }
 
+.nav-links a:hover {
+    color: #ff3b00;
+}
+
+/* Hamburguesa */
 .hamburger {
     display: none;
     font-size: 34px;
@@ -44,6 +58,7 @@ body {
     color: white;
 }
 
+/* Menú móvil */
 .mobile-menu {
     display: none;
     position: fixed;
@@ -61,13 +76,13 @@ body {
 .mobile-menu a {
     color: white;
     text-decoration: none;
-    font-size: 1.4rem;
+    font-size: 1.35rem;
 }
 
-/* Hero */
+/* ==================== HERO ==================== */
 .hero {
     height: 100vh;
-    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('https://picsum.photos/id/1015/2000/1200') center/cover;
+    background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://picsum.photos/id/1015/2000/1200') center/cover;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -75,43 +90,53 @@ body {
 }
 
 .hero-content h1 {
-    font-size: clamp(2.8rem, 8vw, 4.5rem);
+    font-size: clamp(2.8rem, 8vw, 4.8rem);
     color: #ff3b00;
-}
-
-.btn-primary {
-    background: #ff3b00;
-    color: white;
-    padding: 18px 45px;
-    border: none;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 30px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .nav-links { display: none; }
-    .hamburger { display: block; }
-}
-.hero-content {
-    max-width: 900px;
-    padding: 0 20px;
-}
-
-.hero-content h1 {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     line-height: 1.1;
 }
 
 .hero-content p {
     font-size: 1.45rem;
     margin-bottom: 50px;
-    opacity: 0.95;
+    opacity: 0.9;
 }
 
 .btn-primary {
+    background: #ff3b00;
+    color: white;
     padding: 18px 50px;
-    font-size: 1.25rem;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* ==================== SECCIONES ==================== */
+.section {
+    padding: 120px 8%;
+    text-align: center;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.section h2 {
+    font-size: 3rem;
+    color: #ff3b00;
+    margin-bottom: 40px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+    .hamburger {
+        display: block;
+    }
+    
+    .section {
+        padding: 80px 5%;
+    }
 }
