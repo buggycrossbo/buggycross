@@ -1,8 +1,4 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -10,14 +6,14 @@ body {
     color: #eee;
 }
 
-/* NAVBAR SIMPLE Y FUNCIONAL */
+/* Navbar */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
-    background: #000;
+    background: rgba(10,10,10,0.98);
     z-index: 1000;
-    padding: 20px 5%;
+    padding: 18px 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,32 +24,74 @@ body {
     font-size: 28px;
     font-weight: 900;
     color: #ff3b00;
-    letter-spacing: 2px;
 }
 
 .nav-links {
     display: flex;
-    gap: 30px;
+    gap: 35px;
 }
 
 .nav-links a {
     color: white;
     text-decoration: none;
     font-weight: 600;
-    font-size: 1.1rem;
 }
 
-.nav-links a:hover {
+.hamburger {
+    display: none;
+    font-size: 34px;
+    cursor: pointer;
+    color: white;
+}
+
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 75px;
+    left: 0;
+    width: 100%;
+    background: #0a0a0a;
+    flex-direction: column;
+    padding: 30px;
+    gap: 25px;
+    border-top: 1px solid #333;
+    z-index: 999;
+}
+
+.mobile-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.4rem;
+}
+
+/* Hero */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('https://picsum.photos/id/1015/2000/1200') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: clamp(2.8rem, 8vw, 4.5rem);
     color: #ff3b00;
 }
 
-/* Móvil */
+.btn-primary {
+    background: #ff3b00;
+    color: white;
+    padding: 18px 45px;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 30px;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    .nav-links {
-        gap: 20px;
-    }
-    
-    .nav-links a {
-        font-size: 1rem;
-    }
+    .nav-links { display: none; }
+    .hamburger { display: block; }
 }
