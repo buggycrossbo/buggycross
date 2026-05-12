@@ -53,7 +53,7 @@
     Sábados y Domingos: 09:00 - 17:30<br>
     <strong>Lunes y Martes: Cerrado</strong></p>
 
-    <form action="https://formspree.io/f/TU_CODIGO_AQUI" method="POST" class="contact-form" id="reservaForm">
+    <form action="https://formspree.io/f/xjglllva" method="POST" class="contact-form" id="reservaForm">
       <input type="text" name="nombre" placeholder="Tu nombre completo" required>
       <input type="email" name="email" placeholder="Tu correo electrónico" required>
       <input type="tel" name="whatsapp" placeholder="Número de WhatsApp" required>
@@ -80,7 +80,7 @@
 
       fechaInput.addEventListener('change', function() {
         const selectedDate = new Date(this.value);
-        const day = selectedDate.getDay(); // 0=Domingo, 1=Lunes, 2=Martes...
+        const day = selectedDate.getDay(); // 0=Domingo, 1=Lunes, 2=Martes, 3=Miércoles...
 
         if (day === 1 || day === 2) { 
           alert("Lo sentimos, no trabajamos los lunes ni martes.");
@@ -88,10 +88,13 @@
           return;
         }
 
-        if (day >= 3 && day <= 5) { // Miércoles a Viernes
+        // Miércoles a Viernes (días 3,4,5)
+        if (day >= 3 && day <= 5) {
           horaInput.setAttribute('min', '15:00');
           horaInput.setAttribute('max', '18:30');
-        } else { // Sábado y Domingo
+        } 
+        // Sábado (6) y Domingo (0)
+        else {
           horaInput.setAttribute('min', '09:00');
           horaInput.setAttribute('max', '17:30');
         }
