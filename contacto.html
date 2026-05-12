@@ -6,6 +6,36 @@
   <title>Contacto - Buggycross Bolivia</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .contact-form {
+      max-width: 650px;
+      margin: 40px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .contact-form input,
+    .contact-form textarea,
+    .contact-form select {
+      padding: 16px 18px;
+      font-size: 1.1rem;
+      background: #1f1f1f;
+      border: 1px solid #444;
+      border-radius: 8px;
+      color: white;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: #ff3b00;
+      outline: none;
+    }
+    .contact-form button {
+      padding: 18px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
   <nav class="navbar">
@@ -29,17 +59,22 @@
   </div>
 
   <section class="section">
-    <h2>Contáctanos y Reserva</h2>
-    <p>Completa el formulario y te responderemos confirmando tu reserva lo antes posible.</p>
+    <h2>Contáctanos y Reserva tu Aventura</h2>
+    <p>Te responderemos confirmando tu reserva lo antes posible.</p>
 
     <form action="https://formspree.io/f/xjglllva" method="POST" class="contact-form">
       <input type="text" name="nombre" placeholder="Tu nombre completo" required>
       <input type="email" name="email" placeholder="Tu correo electrónico" required>
-      <input type="tel" name="whatsapp" placeholder="Tu número de WhatsApp" required>
-      <input type="number" name="personas" placeholder="Cantidad de personas" min="1" required>
-      <textarea name="mensaje" rows="5" placeholder="¿Qué fecha te interesa? ¿Alguna duda o preferencia?" required></textarea>
+      <input type="tel" name="whatsapp" placeholder="Número de WhatsApp" required>
       
-      <button type="submit" class="btn-primary">ENVIAR MENSAJE</button>
+      <input type="date" name="fecha" required>
+      <input type="time" name="hora" required>
+      
+      <input type="number" name="personas" placeholder="Cantidad de personas" min="1" required>
+      
+      <textarea name="mensaje" rows="5" placeholder="¿Alguna preferencia o comentario adicional?" required></textarea>
+      
+      <button type="submit" class="btn-primary">ENVIAR SOLICITUD DE RESERVA</button>
     </form>
   </section>
 
