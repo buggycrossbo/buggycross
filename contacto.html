@@ -48,12 +48,12 @@
 
   <section class="section">
     <h2>Contáctanos y Reserva tu Aventura</h2>
-    <p><strong>Horario de atención:</strong><br>
-    Miércoles a Viernes: 15:00 - 18:30<br>
-    Sábados y Domingos: 09:00 - 17:30<br>
-    <strong>Lunes y Martes: Cerrado</strong></p>
+    <p>Horario de atención:<br>
+    <strong>Miércoles a Viernes:</strong> 15:00 - 18:30<br>
+    <strong>Sábados y Domingos:</strong> 09:00 - 17:30<br>
+    <strong>Lunes y Martes:</strong> Cerrado</p>
 
-    <form action="https://formspree.io/f/xjglllva" method="POST" class="contact-form">
+    <form action="https://formspree.io/f/xjglllva" method="POST" class="contact-form" id="reservaForm">
       <input type="text" name="nombre" placeholder="Tu nombre completo" required>
       <input type="email" name="email" placeholder="Tu correo electrónico" required>
       <input type="tel" name="whatsapp" placeholder="Número de WhatsApp" required>
@@ -70,5 +70,35 @@
   </section>
 
   <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const fechaInput = document.getElementById('fecha');
+      const horaInput = document.getElementById('hora');
+      
+      const today = new Date().toISOString().split('T')[0];
+      fechaInput.setAttribute('min', today);
+
+      fechaInput.addEventListener('change', function() {
+        const selectedDate = new Date(this.value);
+        const day = selectedDate.getDay(); 
+
+        console.log("Día seleccionado:", day); // Para depuración
+
+        if (day === 1 || day === 2) {
+          alert("Lo sentimos, no trabajamos los lunes ni martes.");
+          this.value = '';
+          return;
+        }
+
+        if (day >= 3 && day <= 5) { // Miércoles a Viernes
+          horaInput.setAttribute('min', '15:00');
+          horaInput.setAttribute('max', '18:30');
+        } else { // Sábado y Domingo
+          horaInput.setAttribute('min', '09:00');
+          horaInput.setAttribute('max', '17:30');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
