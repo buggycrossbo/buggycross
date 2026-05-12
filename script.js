@@ -1,70 +1,75 @@
-// script.js
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // Mostrar el chat solo cuando el usuario hace clic en "ENVIAR MENSAJE"
-    const btnEnviar = document.querySelector('.btn-primary');
+// script.js - Buggycross Bolivia
+
+// Función para el menú móvil
+function toggleMenu() {
+    const menu = document.getElementById('mobile-menu');
+    if (menu) {
+        if (menu.style.display === 'flex') {
+            menu.style.display = 'none';
+        } else {
+            menu.style.display = 'flex';
+        }
+    }
+}
+
+// Función para mostrar el chat en Contacto
+function mostrarChat() {
     const chatContainer = document.getElementById('chat-container');
-    
-    if (btnEnviar && chatContainer) {
-        btnEnviar.addEventListener('click', function(e) {
-            // Solo mostrar el chat si estamos en la sección de contacto
-            if (window.location.hash === '#contacto' || 
-                document.getElementById('contacto').getBoundingClientRect().top < 100) {
-                
-                e.preventDefault();
-                chatContainer.style.display = 'block';
-                
-                // Pequeña animación
-                chatContainer.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
+    if (chatContainer) {
+        chatContainer.style.display = 'block';
+        chatContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Función para enviar mensaje por WhatsApp
+function enviarMensaje() {
+    const nombre = document.getElementById('nombre').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const mensaje = document.getElementById('mensaje').value.trim();
+
+    if (!nombre || !telefono) {
+        alert('Por favor completa tu nombre y número de WhatsApp');
+        return;
     }
 
-    // Función para enviar mensaje del formulario
-    window.enviarMensaje = function() {
-        const nombre = document.getElementById('nombre').value;
-        const telefono = document.getElementById('telefono').value;
-        const mensaje = document.getElementById('mensaje').value;
+    const texto = `Hola! Me llamo ${nombre}. Mi número es ${telefono}. ${mensaje || 'Quiero información sobre las vueltas en buggy.'}`;
+    
+    // Cambia este número por el tuyo real
+    const numeroWhatsApp = "59171234567"; 
+    const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
+    
+    window.open(url, '_blank');
+}
 
-        if (!nombre || !telefono) {
-            alert('Por favor completa tu nombre y número de WhatsApp');
-            return;
-        }
+// Función básica del chat
+function enviarChat() {
+    const input = document.getElementById('chat-input');
+    const chatBox = document.getElementById('chat-box');
+    
+    if (input && chatBox && input.value.trim() !== "") {
+        // Mensaje del usuario
+        const msgUser = document.createElement('div');
+        msgUser.style.cssText = 'text-align: right; margin: 12px 0; color: #ff3b00; font-weight: 500;';
+        msgUser.textContent = input.value;
+        chatBox.appendChild(msgUser);
 
-        const texto = `Hola! Me llamo ${nombre}. Mi número es ${telefono}. ${mensaje || 'Quiero más información sobre las vueltas en buggy.'}`;
-        
-        const numeroWhatsApp = "591XXXXXXXXX"; // ← Cambia esto con tu número real
-        const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
-        
-        window.open(url, '_blank');
-    };
-
-    // Función básica del chat (por ahora solo simula)
-    window.enviarChat = function() {
-        const input = document.getElementById('chat-input');
-        const chatBox = document.getElementById('chat-box');
-        
-        if (input.value.trim() !== "") {
-            const mensajeUsuario = document.createElement('div');
-            mensajeUsuario.style.cssText = 'text-align: right; margin: 10px 0; color: #ff3b00;';
-            mensajeUsuario.textContent = input.value;
-            chatBox.appendChild(mensajeUsuario);
-            
-            // Respuesta automática simulada
-            setTimeout(() => {
-                const respuesta = document.createElement('div');
-                respuesta.style.cssText = 'text-align: left; margin: 10px 0; background: #222; padding: 12px; border-radius: 8px; display: inline-block;';
-                respuesta.textContent = "¡Gracias por tu mensaje! En breve te responderemos por WhatsApp.";
-                chatBox.appendChild(respuesta);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 800);
-
-            input.value = '';
+        // Respuesta simulada
+        setTimeout(() => {
+            const msgBot = document.createElement('div');
+            msgBot.style.cssText = 'text-align: left; margin: 12px 0; background: #1f1f1f; padding: 14px; border-radius: 12px; max-width: 80%;';
+            msgBot.textContent = "¡Gracias por tu mensaje! Te responderemos por WhatsApp en breve.";
+            chatBox.appendChild(msgBot);
             chatBox.scrollTop = chatBox.scrollHeight;
-        }
-    };
+        }, 900);
 
-    // Permitir enviar chat con la tecla Enter
+        input.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+}
+
+// Inicializar eventos
+document.addEventListener('DOMContentLoaded', function() {
+    // Enter en el chat
     const chatInput = document.getElementById('chat-input');
     if (chatInput) {
         chatInput.addEventListener('keypress', function(e) {
@@ -73,9 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-function toggleMenu() {
-    const menu = document.getElementById('mobile-menu');
-    menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
-}
-    console.log('%cBuggycross Bolivia - Página cargada correctamente', 'color: #ff3b00; font-weight: bold');
+
+    console.log('%cBuggycross Bolivia - Página cargada correctamente', 'color: #ff3b00; font-size: 14px;');
 });
