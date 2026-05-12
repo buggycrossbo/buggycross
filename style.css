@@ -18,7 +18,7 @@ body {
     background: rgba(10,10,10,0.98);
     backdrop-filter: blur(10px);
     z-index: 1000;
-    padding: 18px 5%;
+    padding: 20px 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -35,15 +35,15 @@ body {
 /* Menú en computadora */
 .nav-links {
     display: flex;
-    gap: 35px;
+    gap: 40px;
     align-items: center;
 }
 
 .nav-links a {
     color: white;
     text-decoration: none;
-    font-weight: 500;
-    font-size: 1.05rem;
+    font-weight: 600;
+    font-size: 1.1rem;
     transition: color 0.3s;
 }
 
@@ -51,10 +51,10 @@ body {
     color: #ff3b00;
 }
 
-/* Hamburguesa (solo en móvil) */
+/* Hamburguesa para móvil */
 .hamburger {
     display: none;
-    font-size: 32px;
+    font-size: 34px;
     cursor: pointer;
     color: white;
 }
@@ -63,13 +63,13 @@ body {
 .mobile-menu {
     display: none;
     position: fixed;
-    top: 70px;
+    top: 75px;
     left: 0;
     width: 100%;
     background: #0a0a0a;
     flex-direction: column;
-    padding: 25px;
-    gap: 20px;
+    padding: 30px 5%;
+    gap: 25px;
     border-top: 1px solid #333;
     z-index: 999;
 }
@@ -77,14 +77,13 @@ body {
 .mobile-menu a {
     color: white;
     text-decoration: none;
-    font-size: 1.3rem;
-    padding: 10px 0;
+    font-size: 1.35rem;
 }
 
-/* ==================== HERO Y DEMÁS ==================== */
+/* ==================== HERO ==================== */
 .hero {
     height: 100vh;
-    background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://picsum.photos/id/1015/2000/1200') center/cover;
+    background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://picsum.photos/id/1015/2000/1200') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -92,7 +91,7 @@ body {
 }
 
 .hero-content h1 {
-    font-size: clamp(2.8rem, 8vw, 4.5rem);
+    font-size: clamp(2.8rem, 8vw, 4.8rem);
     color: #ff3b00;
     margin-bottom: 20px;
 }
@@ -100,12 +99,13 @@ body {
 .btn-primary {
     background: #ff3b00;
     color: white;
-    padding: 16px 40px;
+    padding: 18px 45px;
     border: none;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
     margin-top: 30px;
+    border-radius: 4px;
 }
 
 /* Responsive */
@@ -113,7 +113,6 @@ body {
     .nav-links {
         display: none;
     }
-    
     .hamburger {
         display: block;
     }
