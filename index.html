@@ -3,79 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buggycross Bolivia | Aventura Extrema 4x4</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>Buggycross Bolivia | Aventura Extrema</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
-  <!-- HERO -->
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">BUGGYCROSS</div>
+    <div class="nav-links">
+      <a href="#quienes-somos">Quiénes Somos</a>
+      <a href="#buggies">Nuestros Buggies</a>
+      <a href="#hidroponia">Hidroponía</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
   <header class="hero">
-    <div class="hero-overlay">
-      <nav class="navbar">
-        <div class="logo">BUGGYCROSS</div>
-        <div class="nav-links">
-          <a href="#quienes-somos">Quiénes Somos</a>
-          <a href="#buggies">Nuestros Buggies</a>
-          <a href="#hidroponia">Hidroponía</a>
-          <a href="#contacto">Contacto</a>
-        </div>
-      </nav>
-      
-      <div class="hero-content">
-        <h1>LA AVENTURA MÁS EXTREMA DE BOLIVIA</h1>
-        <p>Surca la pista off-road más desafiante del país al volante de un buggy</p>
-        <a href="#contacto" class="btn-primary">RESERVAR AHORA</a>
-      </div>
+    <div class="hero-content">
+      <h1>LA AVENTURA MÁS EXTREMA<br>DE BOLIVIA</h1>
+      <p>Surca la pista off-road más desafiante al volante de un buggy</p>
+      <a href="#contacto" class="btn-primary">RESERVAR AHORA</a>
     </div>
   </header>
 
-  <!-- QUIÉNES SOMOS -->
+  <!-- Secciones -->
   <section id="quienes-somos" class="section">
     <h2>Quiénes Somos</h2>
-    <p>Somos un equipo apasionado por la adrenalina y la naturaleza. Combinamos dos mundos aparentemente opuestos: la velocidad extrema en pista off-road y la sostenibilidad a través de la hidroponía.</p>
+    <p>Somos un equipo apasionado por la adrenalina y la naturaleza.</p>
   </section>
 
-  <!-- BUGGIES -->
   <section id="buggies" class="section dark">
     <h2>Nuestros Buggies</h2>
-    <div class="cards">
-      <div class="card">
-        <h3>Buggy Individual</h3>
-        <p>Para los más valientes. Vive la experiencia completa en solitario.</p>
-      </div>
-      <div class="card">
-        <h3>Buggy Doble</h3>
-        <p>Ideal para parejas o amigos. Comparte la adrenalina.</p>
-      </div>
-    </div>
+    <p>Buggy Individual y Doble - Vive la experiencia completa.</p>
   </section>
 
-  <!-- HIDROPONÍA -->
   <section id="hidroponia" class="section">
     <h2>Hidroponía Sostenible</h2>
-    <p>Además de la adrenalina, cultivamos el futuro. Nuestro sistema de hidroponía produce vegetales frescos de alta calidad de forma sostenible.</p>
+    <p>Cultivamos el futuro con tecnología sin tierra.</p>
   </section>
 
-  <!-- CONTACTO -->
   <section id="contacto" class="section dark">
     <h2>¿Listo para la aventura?</h2>
-    <p>Contáctanos y reserva tu vuelta en la pista más extrema de Bolivia.</p>
-    
-    <div class="contact-form">
-      <input type="text" id="nombre" placeholder="Tu nombre">
-      <input type="tel" id="telefono" placeholder="Tu número de WhatsApp">
-      <textarea id="mensaje" placeholder="¿Qué aventura estás buscando?"></textarea>
-      <button onclick="enviarMensaje()" class="btn-primary">ENVIAR MENSAJE</button>
-    </div>
-
-    <!-- Chat aparecerá aquí -->
-    <div id="chat-container" style="display: none; margin-top: 30px;">
-      <h3>Chatea con nosotros</h3>
-      <div id="chat-box"></div>
-      <input type="text" id="chat-input" placeholder="Escribe tu mensaje...">
-      <button onclick="enviarChat()">Enviar</button>
-    </div>
+    <button onclick="mostrarChat()" class="btn-primary">HABLA CON NOSOTROS</button>
   </section>
 
   <script src="script.js"></script>
