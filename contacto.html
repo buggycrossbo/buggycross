@@ -80,18 +80,22 @@
 
       fechaInput.addEventListener('change', function() {
         const selectedDate = new Date(this.value);
-        const day = selectedDate.getDay();   // 0=Domingo, 1=Lunes, 2=Martes, 3=Miércoles...
+        const day = selectedDate.getDay(); // 0=Domingo, 1=Lunes, 2=Martes, 3=Miércoles...
 
+        // Lunes y Martes cerrados
         if (day === 1 || day === 2) {
           alert("Lo sentimos, no trabajamos los lunes ni martes.");
           this.value = '';
           return;
         }
 
-        if (day >= 3 && day <= 5) {        // Miércoles, Jueves, Viernes
+        // Miércoles a Viernes (días 3,4,5)
+        if (day >= 3 && day <= 5) {
           horaInput.setAttribute('min', '15:00');
           horaInput.setAttribute('max', '18:30');
-        } else {                           // Sábado y Domingo
+        } 
+        // Sábado (6) y Domingo (0)
+        else {
           horaInput.setAttribute('min', '09:00');
           horaInput.setAttribute('max', '17:30');
         }
