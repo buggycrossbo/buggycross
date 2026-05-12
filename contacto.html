@@ -23,11 +23,6 @@
       border-radius: 8px;
       color: white;
     }
-    .contact-form input:focus,
-    .contact-form textarea:focus {
-      border-color: #ff3b00;
-      outline: none;
-    }
   </style>
 </head>
 <body>
@@ -85,9 +80,9 @@
 
       fechaInput.addEventListener('change', function() {
         const selectedDate = new Date(this.value);
-        const day = selectedDate.getDay(); // 0=Domingo, 1=Lunes, 2=Martes, etc.
+        const day = selectedDate.getDay(); // 0=Domingo, 1=Lunes, 2=Martes...
 
-        if (day === 1 || day === 2) { // Lunes y Martes cerrados
+        if (day === 1 || day === 2) { 
           alert("Lo sentimos, no trabajamos los lunes ni martes.");
           this.value = '';
           return;
