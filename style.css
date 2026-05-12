@@ -1,46 +1,80 @@
-/* Navbar mejorado */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: #0a0a0a;
+    color: #eee;
+}
+
 .navbar {
-    position: absolute;
-    top: 30px;
-    right: 50px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(10,10,10,0.95);
+    padding: 20px 5%;
     display: flex;
-    gap: 35px;               /* Más espacio entre enlaces */
+    justify-content: space-between;
     align-items: center;
+    z-index: 1000;
+    border-bottom: 1px solid #333;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 900;
+    color: #ff3b00;
+    letter-spacing: 3px;
 }
 
 .nav-links a {
     color: white;
     text-decoration: none;
-    font-weight: 600;
-    font-size: 1.05rem;
-    transition: color 0.3s;
-    padding: 8px 0;
-    position: relative;
+    margin-left: 35px;
+    font-weight: 500;
+    font-size: 1.1rem;
 }
 
 .nav-links a:hover {
     color: #ff3b00;
 }
 
-/* Separadores entre enlaces */
-.nav-links a:not(:last-child)::after {
-    content: "•";
-    margin-left: 35px;
-    color: #666;
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://picsum.photos/id/1015/2000/1200') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 4.2rem;
+    margin-bottom: 20px;
+    color: #ff3b00;
+}
+
+.btn-primary {
+    background: #ff3b00;
+    color: white;
+    padding: 18px 45px;
+    border: none;
     font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 30px;
 }
 
-/* Resto del CSS anterior (mantengo lo demás igual) */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.section {
+    padding: 120px 10%;
+    text-align: center;
 }
 
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #0a0a0a;
-    color: #eee;
+.section.dark {
+    background: #111;
 }
 
-/* ... (el resto del CSS que ya tenías) */
+h2 {
+    font-size: 3rem;
+    color: #ff3b00;
+    margin-bottom: 30px;
+}
