@@ -16,7 +16,11 @@
       text-align: center;
       padding: 20px;
     }
-    h1 { color: #ff3b00; margin: 30px 0; font-size: 2.8rem; }
+    h1 { 
+      color: #ff3b00; 
+      margin: 40px 0 30px; 
+      font-size: 2.8rem; 
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -36,7 +40,7 @@
       justify-content: center;
       cursor: pointer;
     }
-    .timer { font-size: 3.3rem; margin: 15px 0; font-weight: 900; }
+    .timer { font-size: 3.4rem; margin: 15px 0; font-weight: 900; }
     .status { font-size: 1.1rem; margin-top: 8px; }
   </style>
 </head>
@@ -124,10 +128,36 @@
       closeModal();
     }
 
-    // Conteo en tiempo real
+    // Actualización en tiempo real
     db.ref('timers').on('value', (snapshot) => {
       const data = snapshot.val() || {};
 
       buggies.forEach(color => {
         const timerEl = document.getElementById(`timer-${color}`);
-        const statusEl = document.getElementById
+        const statusEl = document.getElementById(`status-${color}`);
+
+        if (data[color] && data[color].endTime) {
+          const remaining = Math.max(0, Math.floor((data[color].endTime - Date.now()) / 1000));
+          const min = Math.floor(remaining / 60);
+          const sec = remaining % 60;
+          
+          timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+
+          if (remaining <= 0) {
+            timerEl.textContent = "¡TIEMPO!";
+            statusEl.textContent = "Finalizado";
+            db.ref('timers/' + color).remove();
+          } else {
+            statusEl.textContent = "Corriendo";
+          }
+        } else {
+          timerEl.textContent = "Listo";
+          statusEl.textContent = "Disponible";
+        }
+      });
+    });
+
+    createCards();
+  </script>
+</body>
+</html>
