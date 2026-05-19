@@ -70,7 +70,17 @@
     ];
 
     let timers = {};
-    let currentBuggy = '';
+
+    function saveTimers() {
+      localStorage.setItem('buggyTimers', JSON.stringify(timers));
+    }
+
+    function loadTimers() {
+      const saved = localStorage.getItem('buggyTimers');
+      if (saved) {
+        timers = JSON.parse(saved);
+      }
+    }
 
     function createCards() {
       const grid = document.getElementById('grid');
@@ -103,18 +113,31 @@
       document.getElementById('modal').style.display = 'none';
     }
 
+    let currentBuggy = '';
+
     function startTimer(minutes) {
       closeModal();
       const endTime = Date.now() + minutes * 60000;
-      timers[currentBuggy] = { endTime, interval: null };
+      timers[currentBuggy] = { endTime };
 
-      const timerEl = document.getElementById(`timer-${currentBuggy}`);
-      const statusEl = document.getElementById(`status-${currentBuggy}`);
+      saveTimers();
+      runTimer(currentBuggy);
+    }
+
+    function runTimer(color) {
+      const timerEl = document.getElementById(`timer-${color}`);
+      const statusEl = document.getElementById(`status-${color}`);
 
       const interval = setInterval(() => {
-        const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+        if (!timers[color]) {
+          clearInterval(interval);
+          return;
+        }
+
+        const remaining = Math.max(0, Math.floor((timers[color].endTime - Date.now()) / 1000));
         const min = Math.floor(remaining / 60);
         const sec = remaining % 60;
+
         timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
 
         if (remaining <= 0) {
@@ -122,17 +145,16 @@
           timerEl.textContent = "¡TIEMPO!";
           statusEl.textContent = "Finalizado";
           playAlarm();
-          delete timers[currentBuggy];
+          delete timers[color];
+          saveTimers();
         }
       }, 1000);
-
-      timers[currentBuggy].interval = interval;
     }
 
     function cancelCurrentTimer() {
       if (timers[currentBuggy]) {
-        clearInterval(timers[currentBuggy].interval);
         delete timers[currentBuggy];
+        saveTimers();
       }
       document.getElementById(`timer-${currentBuggy}`).textContent = "Listo";
       document.getElementById(`status-${currentBuggy}`).textContent = "Disponible";
@@ -145,7 +167,14 @@
       setTimeout(() => audio.play(), 700);
     }
 
+    // Iniciar todo
+    loadTimers();
     createCards();
+
+    // Restaurar timers activos
+    Object.keys(timers).forEach(color => {
+      runTimer(color);
+    });
   </script>
 </body>
 </html>
