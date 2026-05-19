@@ -9,25 +9,9 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: #0a0a0a;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-    h1 { 
-      color: #ff3b00; 
-      margin: 40px 0 30px; 
-      font-size: 2.8rem; 
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px;
-      max-width: 1600px;
-      margin: 0 auto;
-    }
+    body { font-family: 'Montserrat', sans-serif; background: #0a0a0a; color: white; text-align: center; padding: 20px; }
+    h1 { color: #ff3b00; margin: 30px 0; font-size: 2.8rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; max-width: 1600px; margin: 0 auto; }
     .buggy-card {
       padding: 40px 20px;
       border-radius: 15px;
@@ -40,7 +24,7 @@
       justify-content: center;
       cursor: pointer;
     }
-    .timer { font-size: 3.4rem; margin: 15px 0; font-weight: 900; }
+    .timer { font-size: 3.5rem; margin: 15px 0; font-weight: 900; }
     .status { font-size: 1.1rem; margin-top: 8px; }
   </style>
 </head>
@@ -57,7 +41,7 @@
       <button onclick="startTimer(5)" style="background:#ff3b00; padding:18px; margin:12px; font-size:1.4rem; width:85%; border:none; border-radius:8px;">5 Minutos</button>
       <button onclick="startTimer(10)" style="background:#ff3b00; padding:18px; margin:12px; font-size:1.4rem; width:85%; border:none; border-radius:8px;">10 Minutos</button>
       
-      <button id="cancel-timer-btn" onclick="cancelCurrentTimer()" 
+      <button id="cancel-btn" onclick="cancelTimer()" 
               style="background:#d32f2f; padding:16px; margin:15px 12px 10px; font-size:1.3rem; width:85%; border:none; border-radius:8px; display:none;">
         ❌ CANCELAR TIMER
       </button>
@@ -109,7 +93,7 @@
     function openModal(color) {
       currentBuggy = color;
       document.getElementById('modal-title').textContent = color;
-      document.getElementById('cancel-timer-btn').style.display = 'none';
+      document.getElementById('cancel-btn').style.display = 'none';
       document.getElementById('modal').style.display = 'flex';
     }
 
@@ -123,12 +107,12 @@
       db.ref('timers/' + currentBuggy).set({ endTime: endTime });
     }
 
-    function cancelCurrentTimer() {
+    function cancelTimer() {
       db.ref('timers/' + currentBuggy).remove();
       closeModal();
     }
 
-    // Actualización en tiempo real
+    // Actualización en tiempo real + conteo local
     db.ref('timers').on('value', (snapshot) => {
       const data = snapshot.val() || {};
 
@@ -137,22 +121,34 @@
         const statusEl = document.getElementById(`status-${color}`);
 
         if (data[color] && data[color].endTime) {
-          const remaining = Math.max(0, Math.floor((data[color].endTime - Date.now()) / 1000));
-          const min = Math.floor(remaining / 60);
-          const sec = remaining % 60;
-          
-          timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+          const endTime = data[color].endTime;
 
-          if (remaining <= 0) {
-            timerEl.textContent = "¡TIEMPO!";
-            statusEl.textContent = "Finalizado";
-            db.ref('timers/' + color).remove();
-          } else {
-            statusEl.textContent = "Corriendo";
-          }
+          const updateTimer = () => {
+            const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+            const min = Math.floor(remaining / 60);
+            const sec = remaining % 60;
+            timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+
+            if (remaining <= 0) {
+              timerEl.textContent = "¡TIEMPO!";
+              statusEl.textContent = "Finalizado";
+              db.ref('timers/' + color).remove();
+            } else {
+              statusEl.textContent = "Corriendo";
+            }
+          };
+
+          updateTimer(); // Actualizar inmediatamente
+          // Actualizar cada segundo
+          if (window[`interval_${color}`]) clearInterval(window[`interval_${color}`]);
+          window[`interval_${color}`] = setInterval(updateTimer, 1000);
+
         } else {
           timerEl.textContent = "Listo";
           statusEl.textContent = "Disponible";
+          if (window[`interval_${color}`]) {
+            clearInterval(window[`interval_${color}`]);
+          }
         }
       });
     });
