@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Control de Tiempos - Buggycross</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -61,51 +63,50 @@
   </div>
 
   <script>
-    const buggies = [
-      { color: "Rojo",    bg: "#c62828" },
-      { color: "Verde",   bg: "#2e7d32" },
-      { color: "Azul",    bg: "#1565c0" },
-      { color: "Morado",  bg: "#6a1b9a" },
-      { color: "Naranja", bg: "#ef6c00" }
-    ];
+    // ==================== CONFIGURACIÓN FIREBASE ====================
+    const firebaseConfig = {
+      apiKey: "AIzaSyDGKDYHEIZKnoppP99TToagTZR24uqbjao",
+      authDomain: "buggycross-control.firebaseapp.com",
+      databaseURL: "https://buggycross-control-default-rtdb.firebaseio.com",
+      projectId: "buggycross-control",
+      storageBucket: "buggycross-control.firebasestorage.app",
+      messagingSenderId: "580647567200",
+      appId: "1:580647567200:web:dffc5a656c0b7b8bdd2805"
+    };
 
-    let timers = {};
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    function saveTimers() {
-      localStorage.setItem('buggyTimers', JSON.stringify(timers));
-    }
+    const buggies = ["Rojo", "Verde", "Azul", "Morado", "Naranja"];
 
-    function loadTimers() {
-      const saved = localStorage.getItem('buggyTimers');
-      if (saved) {
-        timers = JSON.parse(saved);
-      }
-    }
+    let currentBuggy = '';
 
     function createCards() {
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
-      buggies.forEach(b => {
+      buggies.forEach(color => {
         const card = document.createElement('div');
         card.className = 'buggy-card';
-        card.style.backgroundColor = b.bg;
+        card.style.backgroundColor = getColor(color);
         card.innerHTML = `
-          <div>${b.color}</div>
-          <div class="timer" id="timer-${b.color}">Listo</div>
-          <div class="status" id="status-${b.color}">Disponible</div>
+          <div>${color}</div>
+          <div class="timer" id="timer-${color}">Listo</div>
+          <div class="status" id="status-${color}">Disponible</div>
         `;
-        card.onclick = () => openModal(b.color);
+        card.onclick = () => openModal(color);
         grid.appendChild(card);
       });
+    }
+
+    function getColor(color) {
+      const colors = { Rojo: "#c62828", Verde: "#2e7d32", Azul: "#1565c0", Morado: "#6a1b9a", Naranja: "#ef6c00" };
+      return colors[color];
     }
 
     function openModal(color) {
       currentBuggy = color;
       document.getElementById('modal-title').textContent = color;
-
-      const cancelBtn = document.getElementById('cancel-timer-btn');
-      cancelBtn.style.display = timers[color] ? 'block' : 'none';
-
+      document.getElementById('cancel-timer-btn').style.display = 'none'; // Se actualizará más adelante
       document.getElementById('modal').style.display = 'flex';
     }
 
@@ -113,51 +114,18 @@
       document.getElementById('modal').style.display = 'none';
     }
 
-    let currentBuggy = '';
-
     function startTimer(minutes) {
       closeModal();
       const endTime = Date.now() + minutes * 60000;
-      timers[currentBuggy] = { endTime };
-
-      saveTimers();
-      runTimer(currentBuggy);
-    }
-
-    function runTimer(color) {
-      const timerEl = document.getElementById(`timer-${color}`);
-      const statusEl = document.getElementById(`status-${color}`);
-
-      const interval = setInterval(() => {
-        if (!timers[color]) {
-          clearInterval(interval);
-          return;
-        }
-
-        const remaining = Math.max(0, Math.floor((timers[color].endTime - Date.now()) / 1000));
-        const min = Math.floor(remaining / 60);
-        const sec = remaining % 60;
-
-        timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
-
-        if (remaining <= 0) {
-          clearInterval(interval);
-          timerEl.textContent = "¡TIEMPO!";
-          statusEl.textContent = "Finalizado";
-          playAlarm();
-          delete timers[color];
-          saveTimers();
-        }
-      }, 1000);
+      
+      db.ref('timers/' + currentBuggy).set({
+        endTime: endTime,
+        color: currentBuggy
+      });
     }
 
     function cancelCurrentTimer() {
-      if (timers[currentBuggy]) {
-        delete timers[currentBuggy];
-        saveTimers();
-      }
-      document.getElementById(`timer-${currentBuggy}`).textContent = "Listo";
-      document.getElementById(`status-${currentBuggy}`).textContent = "Disponible";
+      db.ref('timers/' + currentBuggy).remove();
       closeModal();
     }
 
@@ -167,14 +135,38 @@
       setTimeout(() => audio.play(), 700);
     }
 
-    // Iniciar todo
-    loadTimers();
-    createCards();
-
-    // Restaurar timers activos
-    Object.keys(timers).forEach(color => {
-      runTimer(color);
+    // Escuchar cambios en tiempo real
+    db.ref('timers').on('value', (snapshot) => {
+      const data = snapshot.val() || {};
+      
+      buggies.forEach(color => {
+        const timerEl = document.getElementById(`timer-${color}`);
+        const statusEl = document.getElementById(`status-${color}`);
+        
+        if (data[color]) {
+          const remaining = Math.max(0, Math.floor((data[color].endTime - Date.now()) / 1000));
+          const min = Math.floor(remaining / 60);
+          const sec = remaining % 60;
+          
+          timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+          
+          if (remaining <= 0) {
+            timerEl.textContent = "¡TIEMPO!";
+            statusEl.textContent = "Finalizado";
+            playAlarm();
+            db.ref('timers/' + color).remove();
+          } else {
+            statusEl.textContent = "Corriendo";
+          }
+        } else {
+          timerEl.textContent = "Listo";
+          statusEl.textContent = "Disponible";
+        }
+      });
     });
+
+    // Iniciar
+    createCards();
   </script>
 </body>
 </html>
