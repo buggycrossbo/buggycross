@@ -42,11 +42,11 @@
       <button onclick="startTimer(10)" style="background:#ff3b00; padding:18px; margin:12px; font-size:1.4rem; width:85%; border:none; border-radius:8px;">10 Minutos</button>
       
       <button id="cancel-btn" onclick="cancelTimer()" 
-              style="background:#d32f2f; padding:16px; margin:20px 12px 10px; font-size:1.3rem; width:85%; border:none; border-radius:8px; display:none;">
+              style="background:#d32f2f; padding:16px; margin:15px 12px 10px; font-size:1.3rem; width:85%; border:none; border-radius:8px; display:none;">
         ❌ CANCELAR TIMER
       </button>
       
-      <button onclick="closeModal()" style="background:#555; padding:15px; margin-top:10px; font-size:1.1rem; width:85%; border:none; border-radius:8px;">Cerrar</button>
+      <button onclick="closeModal()" style="background:#555; padding:15px; margin-top:15px; font-size:1.1rem; width:85%; border:none; border-radius:8px;">Cerrar</button>
     </div>
   </div>
 
@@ -93,12 +93,7 @@
     function openModal(color) {
       currentBuggy = color;
       document.getElementById('modal-title').textContent = color;
-      
-      // Mostrar botón cancelar si hay timer activo
-      db.ref('timers/' + color).once('value', (snap) => {
-        document.getElementById('cancel-btn').style.display = snap.exists() ? 'block' : 'none';
-      });
-
+      document.getElementById('cancel-btn').style.display = 'none';
       document.getElementById('modal').style.display = 'flex';
     }
 
@@ -117,7 +112,7 @@
       closeModal();
     }
 
-    // Actualización en tiempo real
+    // Actualización en tiempo real + conteo local
     db.ref('timers').on('value', (snapshot) => {
       const data = snapshot.val() || {};
 
@@ -126,22 +121,34 @@
         const statusEl = document.getElementById(`status-${color}`);
 
         if (data[color] && data[color].endTime) {
-          const remaining = Math.max(0, Math.floor((data[color].endTime - Date.now()) / 1000));
-          const min = Math.floor(remaining / 60);
-          const sec = remaining % 60;
-          
-          timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+          const endTime = data[color].endTime;
 
-          if (remaining <= 0) {
-            timerEl.textContent = "¡TIEMPO!";
-            statusEl.textContent = "Finalizado";
-            db.ref('timers/' + color).remove();
-          } else {
-            statusEl.textContent = "Corriendo";
-          }
+          const updateTimer = () => {
+            const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+            const min = Math.floor(remaining / 60);
+            const sec = remaining % 60;
+            timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+
+            if (remaining <= 0) {
+              timerEl.textContent = "¡TIEMPO!";
+              statusEl.textContent = "Finalizado";
+              db.ref('timers/' + color).remove();
+            } else {
+              statusEl.textContent = "Corriendo";
+            }
+          };
+
+          updateTimer(); // Actualizar inmediatamente
+          // Actualizar cada segundo
+          if (window[`interval_${color}`]) clearInterval(window[`interval_${color}`]);
+          window[`interval_${color}`] = setInterval(updateTimer, 1000);
+
         } else {
           timerEl.textContent = "Listo";
           statusEl.textContent = "Disponible";
+          if (window[`interval_${color}`]) {
+            clearInterval(window[`interval_${color}`]);
+          }
         }
       });
     });
