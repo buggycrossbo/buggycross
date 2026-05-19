@@ -30,7 +30,7 @@
       color: white;
       font-size: 1.4rem;
       font-weight: bold;
-      min-height: 260px;
+      min-height: 280px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -78,8 +78,6 @@
 
     const buggies = ["Rojo", "Verde", "Azul", "Morado", "Naranja"];
 
-    let currentBuggy = '';
-
     function createCards() {
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
@@ -90,77 +88,4 @@
         card.innerHTML = `
           <div>${color}</div>
           <div class="timer" id="timer-${color}">Listo</div>
-          <div class="status" id="status-${color}">Disponible</div>
-        `;
-        card.onclick = () => openModal(color);
-        grid.appendChild(card);
-      });
-    }
-
-    function getColor(color) {
-      const colors = { Rojo: "#c62828", Verde: "#2e7d32", Azul: "#1565c0", Morado: "#6a1b9a", Naranja: "#ef6c00" };
-      return colors[color];
-    }
-
-    function openModal(color) {
-      currentBuggy = color;
-      document.getElementById('modal-title').textContent = color;
-      document.getElementById('cancel-timer-btn').style.display = 'none'; // se activa si hay timer corriendo
-      document.getElementById('modal').style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-    }
-
-    function startTimer(minutes) {
-      closeModal();
-      const endTime = Date.now() + minutes * 60000;
-      db.ref('timers/' + currentBuggy).set({ endTime: endTime });
-    }
-
-    function cancelCurrentTimer() {
-      db.ref('timers/' + currentBuggy).remove();
-      closeModal();
-    }
-
-    function playAlarm() {
-      const audio = new Audio('https://freesound.org/data/previews/276/276951_5121236-lq.mp3');
-      audio.play();
-      setTimeout(() => audio.play(), 700);
-    }
-
-    // Actualización en tiempo real
-    db.ref('timers').on('value', (snapshot) => {
-      const data = snapshot.val() || {};
-
-      buggies.forEach(color => {
-        const timerEl = document.getElementById(`timer-${color}`);
-        const statusEl = document.getElementById(`status-${color}`);
-
-        if (data[color] && data[color].endTime) {
-          const remaining = Math.max(0, Math.floor((data[color].endTime - Date.now()) / 1000));
-          const min = Math.floor(remaining / 60);
-          const sec = remaining % 60;
-          
-          timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
-
-          if (remaining <= 0) {
-            timerEl.textContent = "¡TIEMPO!";
-            statusEl.textContent = "Finalizado";
-            playAlarm();
-            db.ref('timers/' + color).remove();
-          } else {
-            statusEl.textContent = "Corriendo";
-          }
-        } else {
-          timerEl.textContent = "Listo";
-          statusEl.textContent = "Disponible";
-        }
-      });
-    });
-
-    createCards();
-  </script>
-</body>
-</html>
+          <div class
