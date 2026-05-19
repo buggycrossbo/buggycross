@@ -41,13 +41,12 @@
       <button onclick="startTimer(5)" style="background:#ff3b00; padding:18px; margin:12px; font-size:1.4rem; width:85%; border:none; border-radius:8px;">5 Minutos</button>
       <button onclick="startTimer(10)" style="background:#ff3b00; padding:18px; margin:12px; font-size:1.4rem; width:85%; border:none; border-radius:8px;">10 Minutos</button>
       
-      <!-- BOTÓN CANCELAR -->
       <button id="cancel-btn" onclick="cancelTimer()" 
-              style="background:#d32f2f; padding:16px; margin:15px 12px 10px; font-size:1.3rem; width:85%; border:none; border-radius:8px; display:none;">
-        ❌ CANCELAR TIMER ACTUAL
+              style="background:#d32f2f; padding:16px; margin:20px 12px 10px; font-size:1.3rem; width:85%; border:none; border-radius:8px; display:none;">
+        ❌ CANCELAR TIMER
       </button>
       
-      <button onclick="closeModal()" style="background:#555; padding:15px; margin-top:10px; font-size:1.1rem; width:85%; border:none; border-radius:8px;">Cerrar</button>
+      <button onclick="closeModal()" style="background:#555; padding:15px; font-size:1.1rem; width:85%; border:none; border-radius:8px;">Cerrar</button>
     </div>
   </div>
 
@@ -62,92 +61,4 @@
       appId: "1:580647567200:web:dffc5a656c0b7b8bdd2805"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    const buggies = ["Rojo", "Verde", "Azul", "Morado", "Naranja"];
-
-    function createCards() {
-      const grid = document.getElementById('grid');
-      grid.innerHTML = '';
-      buggies.forEach(color => {
-        const card = document.createElement('div');
-        card.className = 'buggy-card';
-        card.style.backgroundColor = getColor(color);
-        card.innerHTML = `
-          <div>${color}</div>
-          <div class="timer" id="timer-${color}">Listo</div>
-          <div class="status" id="status-${color}">Disponible</div>
-        `;
-        card.onclick = () => openModal(color);
-        grid.appendChild(card);
-      });
-    }
-
-    function getColor(c) {
-      const map = {Rojo:"#c62828", Verde:"#2e7d32", Azul:"#1565c0", Morado:"#6a1b9a", Naranja:"#ef6c00"};
-      return map[c];
-    }
-
-    let currentBuggy = "";
-
-    function openModal(color) {
-      currentBuggy = color;
-      document.getElementById('modal-title').textContent = color;
-      
-      // Mostrar botón de cancelar solo si hay timer activo
-      db.ref('timers/' + color).once('value', (snapshot) => {
-        document.getElementById('cancel-btn').style.display = snapshot.exists() ? 'block' : 'none';
-      });
-
-      document.getElementById('modal').style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-    }
-
-    function startTimer(minutes) {
-      closeModal();
-      const endTime = Date.now() + minutes * 60000;
-      db.ref('timers/' + currentBuggy).set({ endTime: endTime });
-    }
-
-    function cancelTimer() {
-      db.ref('timers/' + currentBuggy).remove();
-      closeModal();
-    }
-
-    // Actualización en tiempo real
-    db.ref('timers').on('value', (snapshot) => {
-      const data = snapshot.val() || {};
-
-      buggies.forEach(color => {
-        const timerEl = document.getElementById(`timer-${color}`);
-        const statusEl = document.getElementById(`status-${color}`);
-
-        if (data[color] && data[color].endTime) {
-          const remaining = Math.max(0, Math.floor((data[color].endTime - Date.now()) / 1000));
-          const min = Math.floor(remaining / 60);
-          const sec = remaining % 60;
-          
-          timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
-
-          if (remaining <= 0) {
-            timerEl.textContent = "¡TIEMPO!";
-            statusEl.textContent = "Finalizado";
-            db.ref('timers/' + color).remove();
-          } else {
-            statusEl.textContent = "Corriendo";
-          }
-        } else {
-          timerEl.textContent = "Listo";
-          statusEl.textContent = "Disponible";
-        }
-      });
-    });
-
-    createCards();
-  </script>
-</body>
-</html>
+    firebase.initializeApp(f
