@@ -36,7 +36,7 @@
       justify-content: center;
       cursor: pointer;
     }
-    .timer { font-size: 3rem; margin: 15px 0; font-weight: 900; }
+    .timer { font-size: 3.2rem; margin: 15px 0; font-weight: 900; }
     .status { font-size: 1.1rem; margin-top: 8px; }
   </style>
 </head>
@@ -63,7 +63,6 @@
   </div>
 
   <script>
-    // ==================== CONFIGURACIÓN FIREBASE ====================
     const firebaseConfig = {
       apiKey: "AIzaSyDGKDYHEIZKnoppP99TToagTZR24uqbjao",
       authDomain: "buggycross-control.firebaseapp.com",
@@ -78,8 +77,6 @@
     const db = firebase.database();
 
     const buggies = ["Rojo", "Verde", "Azul", "Morado", "Naranja"];
-
-    let currentBuggy = '';
 
     function createCards() {
       const grid = document.getElementById('grid');
@@ -103,10 +100,12 @@
       return colors[color];
     }
 
+    let currentBuggy = '';
+
     function openModal(color) {
       currentBuggy = color;
       document.getElementById('modal-title').textContent = color;
-      document.getElementById('cancel-timer-btn').style.display = 'none'; // Se actualizará más adelante
+      document.getElementById('cancel-timer-btn').style.display = 'none';
       document.getElementById('modal').style.display = 'flex';
     }
 
@@ -117,11 +116,7 @@
     function startTimer(minutes) {
       closeModal();
       const endTime = Date.now() + minutes * 60000;
-      
-      db.ref('timers/' + currentBuggy).set({
-        endTime: endTime,
-        color: currentBuggy
-      });
+      db.ref('timers/' + currentBuggy).set({ endTime: endTime });
     }
 
     function cancelCurrentTimer() {
@@ -135,28 +130,28 @@
       setTimeout(() => audio.play(), 700);
     }
 
-    // Escuchar cambios en tiempo real
+    // Escucha en tiempo real + conteo suave
     db.ref('timers').on('value', (snapshot) => {
       const data = snapshot.val() || {};
-      
+
       buggies.forEach(color => {
         const timerEl = document.getElementById(`timer-${color}`);
         const statusEl = document.getElementById(`status-${color}`);
-        
-        if (data[color]) {
+
+        if (data[color] && data[color].endTime) {
           const remaining = Math.max(0, Math.floor((data[color].endTime - Date.now()) / 1000));
           const min = Math.floor(remaining / 60);
           const sec = remaining % 60;
-          
+
           timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
-          
-          if (remaining <= 0) {
+
+          if (remaining > 0) {
+            statusEl.textContent = "Corriendo";
+          } else {
             timerEl.textContent = "¡TIEMPO!";
             statusEl.textContent = "Finalizado";
             playAlarm();
             db.ref('timers/' + color).remove();
-          } else {
-            statusEl.textContent = "Corriendo";
           }
         } else {
           timerEl.textContent = "Listo";
@@ -165,7 +160,6 @@
       });
     });
 
-    // Iniciar
     createCards();
   </script>
 </body>
