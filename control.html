@@ -61,4 +61,92 @@
       appId: "1:580647567200:web:dffc5a656c0b7b8bdd2805"
     };
 
-    firebase.initializeApp(f
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const buggies = ["Rojo", "Verde", "Azul", "Morado", "Naranja"];
+
+    function createCards() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      buggies.forEach(color => {
+        const card = document.createElement('div');
+        card.className = 'buggy-card';
+        card.style.backgroundColor = getColor(color);
+        card.innerHTML = `
+          <div>${color}</div>
+          <div class="timer" id="timer-${color}">Listo</div>
+          <div class="status" id="status-${color}">Disponible</div>
+        `;
+        card.onclick = () => openModal(color);
+        grid.appendChild(card);
+      });
+    }
+
+    function getColor(c) {
+      const map = {Rojo:"#c62828", Verde:"#2e7d32", Azul:"#1565c0", Morado:"#6a1b9a", Naranja:"#ef6c00"};
+      return map[c];
+    }
+
+    let currentBuggy = "";
+
+    function openModal(color) {
+      currentBuggy = color;
+      document.getElementById('modal-title').textContent = color;
+      
+      // Ver si ya tiene timer corriendo
+      db.ref('timers/' + color).once('value', (snap) => {
+        document.getElementById('cancel-btn').style.display = snap.exists() ? 'block' : 'none';
+      });
+
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    function startTimer(minutes) {
+      closeModal();
+      const endTime = Date.now() + minutes * 60000;
+      db.ref('timers/' + currentBuggy).set({ endTime: endTime });
+    }
+
+    function cancelTimer() {
+      db.ref('timers/' + currentBuggy).remove();
+      closeModal();
+    }
+
+    // Actualización en tiempo real
+    db.ref('timers').on('value', (snapshot) => {
+      const data = snapshot.val() || {};
+
+      buggies.forEach(color => {
+        const timerEl = document.getElementById(`timer-${color}`);
+        const statusEl = document.getElementById(`status-${color}`);
+
+        if (data[color] && data[color].endTime) {
+          const remaining = Math.max(0, Math.floor((data[color].endTime - Date.now()) / 1000));
+          const min = Math.floor(remaining / 60);
+          const sec = remaining % 60;
+          
+          timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+
+          if (remaining <= 0) {
+            timerEl.textContent = "¡TIEMPO!";
+            statusEl.textContent = "Finalizado";
+            db.ref('timers/' + color).remove();
+          } else {
+            statusEl.textContent = "Corriendo";
+          }
+        } else {
+          timerEl.textContent = "Listo";
+          statusEl.textContent = "Disponible";
+        }
+      });
+    });
+
+    createCards();
+  </script>
+</body>
+</html>
