@@ -21,44 +21,35 @@
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      max-width: 1400px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      max-width: 1600px;
       margin: 0 auto;
     }
     .buggy-card {
-      padding: 40px 20px;
+      padding: 35px 20px;
       border-radius: 15px;
       color: white;
       font-size: 1.4rem;
       font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-      min-height: 220px;
+      min-height: 280px;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      position: relative;
     }
-    .buggy-card:hover { transform: scale(1.05); }
-    
-    .timer { font-size: 2.8rem; margin: 15px 0; }
-    .status { font-size: 1.1rem; margin-top: 10px; }
+    .timer { font-size: 3rem; margin: 15px 0; font-weight: 900; }
+    .status { font-size: 1.1rem; margin-top: 8px; }
 
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.9);
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .modal-content {
-      background: #1a1a1a;
-      padding: 40px;
-      border-radius: 15px;
-      width: 90%;
-      max-width: 400px;
+    button.cancel {
+      margin-top: 15px;
+      background: #d32f2f;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -68,12 +59,12 @@
   <div class="grid" id="grid"></div>
 
   <!-- Modal -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <h2 id="modal-title">Seleccionar tiempo</h2>
-      <button onclick="startTimer(5)" style="background:#ff3b00; padding:15px 30px; margin:15px; font-size:1.3rem; width:80%; border:none; border-radius:8px; cursor:pointer;">5 Minutos</button>
-      <button onclick="startTimer(10)" style="background:#ff3b00; padding:15px 30px; margin:15px; font-size:1.3rem; width:80%; border:none; border-radius:8px; cursor:pointer;">10 Minutos</button>
-      <button onclick="closeModal()" style="background:#555; padding:12px 30px; margin-top:20px; font-size:1.1rem;">Cancelar</button>
+  <div class="modal" id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); align-items:center; justify-content:center; z-index:1000;">
+    <div class="modal-content" style="background:#1a1a1a; padding:40px; border-radius:15px; width:90%; max-width:400px;">
+      <h2 id="modal-title" style="margin-bottom:30px;">Seleccionar tiempo</h2>
+      <button onclick="startTimer(5)" style="background:#ff3b00; padding:18px; margin:10px; font-size:1.4rem; width:85%; border:none; border-radius:8px; cursor:pointer;">5 Minutos</button>
+      <button onclick="startTimer(10)" style="background:#ff3b00; padding:18px; margin:10px; font-size:1.4rem; width:85%; border:none; border-radius:8px; cursor:pointer;">10 Minutos</button>
+      <button onclick="closeModal()" style="background:#555; padding:15px; margin-top:20px; font-size:1.1rem; width:85%; border:none; border-radius:8px;">Cancelar</button>
     </div>
   </div>
 
@@ -90,6 +81,7 @@
 
     function createCards() {
       const grid = document.getElementById('grid');
+      grid.innerHTML = '';
       buggies.forEach(b => {
         const card = document.createElement('div');
         card.className = 'buggy-card';
@@ -98,6 +90,7 @@
           <div>${b.color}</div>
           <div class="timer" id="timer-${b.color}">Listo</div>
           <div class="status" id="status-${b.color}">Disponible</div>
+          <button class="cancel" id="cancel-${b.color}" style="display:none;" onclick="cancelTimer('${b.color}')">Cancelar Timer</button>
         `;
         card.onclick = () => openModal(b.color);
         grid.appendChild(card);
@@ -118,10 +111,13 @@
     function startTimer(minutes) {
       closeModal();
       const endTime = Date.now() + minutes * 60000;
-      timers[currentBuggy] = endTime;
+      timers[currentBuggy] = { endTime, interval: null };
 
       const timerEl = document.getElementById(`timer-${currentBuggy}`);
       const statusEl = document.getElementById(`status-${currentBuggy}`);
+      const cancelBtn = document.getElementById(`cancel-${currentBuggy}`);
+
+      cancelBtn.style.display = 'block';
 
       const interval = setInterval(() => {
         const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
@@ -133,16 +129,29 @@
           clearInterval(interval);
           timerEl.textContent = "¡TIEMPO!";
           statusEl.textContent = "Finalizado";
+          cancelBtn.style.display = 'none';
           playAlarm();
         }
       }, 1000);
+
+      timers[currentBuggy].interval = interval;
+    }
+
+    function cancelTimer(color) {
+      if (timers[color] && timers[color].interval) {
+        clearInterval(timers[color].interval);
+      }
+      delete timers[color];
+
+      document.getElementById(`timer-${color}`).textContent = "Listo";
+      document.getElementById(`status-${color}`).textContent = "Disponible";
+      document.getElementById(`cancel-${color}`).style.display = 'none';
     }
 
     function playAlarm() {
       const audio = new Audio('https://freesound.org/data/previews/276/276951_5121236-lq.mp3');
       audio.play();
-      setTimeout(() => audio.play(), 800);
-      setTimeout(() => audio.play(), 1600);
+      setTimeout(() => audio.play(), 700);
     }
 
     // Iniciar
