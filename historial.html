@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Historial y Control - Buggycross</title>
+  <title>Historial y Timers Activos - Buggycross</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -13,25 +13,25 @@
     h1 { color: #ff3b00; text-align: center; margin: 20px 0; }
     .section { margin-bottom: 50px; }
     table { width: 100%; max-width: 1100px; margin: 0 auto 30px; border-collapse: collapse; background: #1a1a1a; border-radius: 12px; overflow: hidden; }
-    th, td { padding: 14px; text-align: left; border-bottom: 1px solid #333; }
+    th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
     th { background: #ff3b00; color: white; }
     tr:hover { background: #252525; }
-    .active { background: #1e3a1e !important; }
+    .active { background: #1e3a1e; font-weight: bold; }
+    .timer-live { font-size: 1.6rem; font-weight: 900; }
   </style>
 </head>
 <body>
 
-  <h1>HISTORIAL Y ESTADO ACTUAL</h1>
+  <h1>HISTORIAL Y TIMERS ACTIVOS</h1>
 
-  <!-- TIMERS ACTIVOS -->
+  <!-- TIMERS ACTIVOS EN TIEMPO REAL -->
   <div class="section">
-    <h2 style="text-align:center; color:#4ade80;">⏳ TIMERS ACTIVOS EN ESTE MOMENTO</h2>
-    <table id="active-table">
+    <h2 style="text-align:center; color:#4ade80; margin-bottom:15px;">⏳ TIMERS ACTIVOS EN ESTE MOMENTO</h2>
+    <table>
       <thead>
         <tr>
           <th>Buggy</th>
           <th>Tiempo Restante</th>
-          <th>Usuario</th>
         </tr>
       </thead>
       <tbody id="active-body"></tbody>
@@ -40,15 +40,15 @@
 
   <!-- HISTORIAL COMPLETO -->
   <div class="section">
-    <h2 style="text-align:center;">📋 HISTORIAL COMPLETO DE ACTIVIDAD</h2>
-    <table id="history-table">
+    <h2 style="text-align:center; margin-bottom:15px;">📋 HISTORIAL COMPLETO</h2>
+    <table>
       <thead>
         <tr>
           <th>Fecha y Hora</th>
           <th>Buggy</th>
           <th>Usuario</th>
+          <th>Acción</th>
           <th>Duración</th>
-          <th>Estado</th>
         </tr>
       </thead>
       <tbody id="history-body"></tbody>
@@ -71,13 +71,13 @@
 
     function formatDate(ts) {
       const date = new Date(ts);
-      return date.toLocaleString('es-BO', {
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit'
+      return date.toLocaleString('es-BO', { 
+        day: '2-digit', month: '2-digit', year: 'numeric', 
+        hour: '2-digit', minute: '2-digit' 
       });
     }
 
-    // ==================== TIMERS ACTIVOS ====================
+    // ==================== TIMERS ACTIVOS EN TIEMPO REAL ====================
     db.ref('timers').on('value', (snapshot) => {
       const data = snapshot.val() || {};
       const tbody = document.getElementById('active-body');
@@ -97,15 +97,14 @@
           row.classList.add('active');
           row.innerHTML = `
             <td><strong>${color}</strong></td>
-            <td style="font-size:1.5rem; font-weight:bold;">${min}:${sec < 10 ? '0' : ''}${sec}</td>
-            <td>Activo</td>
+            <td class="timer-live">${min}:${sec < 10 ? '0' : ''}${sec}</td>
           `;
           tbody.appendChild(row);
         }
       });
 
       if (!hasActive) {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:40px;">No hay timers activos</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="2" style="text-align:center; padding:40px;">No hay timers activos en este momento</td></tr>`;
       }
     });
 
@@ -120,7 +119,8 @@
             time: log.time,
             buggy: buggy,
             user: log.user || "Desconocido",
-            duration: log.duration || "N/A"
+            duration: log.duration || "N/A",
+            action: log.action || "Activado"
           });
         });
       });
@@ -136,8 +136,8 @@
           <td>${formatDate(log.time)}</td>
           <td><strong>${log.buggy}</strong></td>
           <td>${log.user}</td>
+          <td>${log.action}</td>
           <td>${log.duration}</td>
-          <td>Activado</td>
         `;
         tbody.appendChild(row);
       });
