@@ -10,48 +10,34 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Montserrat', sans-serif; background: #0a0a0a; color: white; text-align: center; padding: 20px; }
-    h1 { color: #ff3b00; margin: 30px 0; font-size: 2.8rem; }
+    h1 { color: #ff3b00; margin: 20px 0; font-size: 2.6rem; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; max-width: 1600px; margin: 0 auto; }
-    .buggy-card {
-      padding: 40px 20px;
-      border-radius: 15px;
-      color: white;
-      font-size: 1.5rem;
-      font-weight: bold;
-      min-height: 280px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      cursor: pointer;
-    }
-    .timer { font-size: 3.5rem; margin: 15px 0; font-weight: 900; }
+    .buggy-card { padding: 40px 20px; border-radius: 15px; color: white; font-size: 1.5rem; font-weight: bold; min-height: 280px; display: flex; flex-direction: column; justify-content: center; cursor: pointer; }
+    .timer { font-size: 3.4rem; margin: 15px 0; font-weight: 900; }
     .status { font-size: 1.1rem; margin-top: 8px; }
   </style>
 </head>
 <body>
 
   <h1>CONTROL DE TIEMPOS</h1>
+  <p id="current-user" style="margin-bottom:20px; color:#aaa;"></p>
   <div class="grid" id="grid"></div>
 
   <!-- Modal -->
   <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); align-items:center; justify-content:center; z-index:1000;">
     <div style="background:#1a1a1a; padding:40px; border-radius:15px; width:90%; max-width:420px;">
-      <h2 id="modal-title" style="margin-bottom:30px; color:#ff3b00;">Seleccionar tiempo</h2>
+      <h2 id="modal-title" style="margin-bottom:25px; color:#ff3b00;"></h2>
       
-      <button onclick="startTimer(5)" style="background:#ff3b00; padding:18px; margin:12px; font-size:1.4rem; width:85%; border:none; border-radius:8px;">5 Minutos</button>
-      <button onclick="startTimer(10)" style="background:#ff3b00; padding:18px; margin:12px; font-size:1.4rem; width:85%; border:none; border-radius:8px;">10 Minutos</button>
+      <button onclick="startTimer(5)" style="background:#ff3b00; padding:18px; margin:10px; font-size:1.4rem; width:85%; border:none; border-radius:8px;">5 Minutos</button>
+      <button onclick="startTimer(10)" style="background:#ff3b00; padding:18px; margin:10px; font-size:1.4rem; width:85%; border:none; border-radius:8px;">10 Minutos</button>
       
-      <button id="cancel-btn" onclick="cancelTimer()" 
-              style="background:#d32f2f; padding:16px; margin:20px 12px 10px; font-size:1.3rem; width:85%; border:none; border-radius:8px; display:none;">
-        ❌ CANCELAR TIMER
-      </button>
-      
+      <button id="cancel-btn" onclick="cancelTimer()" style="background:#d32f2f; padding:16px; margin:15px 10px 10px; font-size:1.3rem; width:85%; border:none; border-radius:8px; display:none;">❌ CANCELAR TIMER</button>
       <button onclick="closeModal()" style="background:#555; padding:15px; margin-top:10px; font-size:1.1rem; width:85%; border:none; border-radius:8px;">Cerrar</button>
     </div>
   </div>
 
   <script>
-    const firebaseConfig = {
+    const firebaseConfig = { /* tu config */ 
       apiKey: "AIzaSyDGKDYHEIZKnoppP99TToagTZR24uqbjao",
       authDomain: "buggycross-control.firebaseapp.com",
       databaseURL: "https://buggycross-control-default-rtdb.firebaseio.com",
@@ -63,6 +49,32 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+
+    // ==================== USUARIOS ====================
+    const users = {
+      "Alejandro": "buggy2026",
+      "Juan": "juan2026",
+      "Carlos": "carlos2026"
+    };
+
+    let currentUser = "";
+
+    function login() {
+      const username = prompt("👤 Ingresa tu nombre de usuario:");
+      if (!username || !users[username]) {
+        alert("Usuario no encontrado");
+        return login();
+      }
+      const password = prompt("🔑 Ingresa tu contraseña:");
+      if (password === users[username]) {
+        currentUser = username;
+        document.getElementById('current-user').textContent = `Usuario: ${username}`;
+        createCards();
+      } else {
+        alert("Contraseña incorrecta");
+        login();
+      }
+    }
 
     const buggies = ["Rojo", "Verde", "Azul", "Morado", "Naranja"];
 
@@ -93,12 +105,7 @@
     function openModal(color) {
       currentBuggy = color;
       document.getElementById('modal-title').textContent = color;
-      
-      // Mostrar botón cancelar si hay timer activo
-      db.ref('timers/' + color).once('value', (snap) => {
-        document.getElementById('cancel-btn').style.display = snap.exists() ? 'block' : 'none';
-      });
-
+      document.getElementById('cancel-btn').style.display = 'none';
       document.getElementById('modal').style.display = 'flex';
     }
 
@@ -109,7 +116,13 @@
     function startTimer(minutes) {
       closeModal();
       const endTime = Date.now() + minutes * 60000;
+      const logEntry = {
+        user: currentUser,
+        time: Date.now(),
+        duration: minutes + " minutos"
+      };
       db.ref('timers/' + currentBuggy).set({ endTime: endTime });
+      db.ref('logs/' + currentBuggy).push(logEntry);   // Guardamos quién lo activó
     }
 
     function cancelTimer() {
@@ -117,43 +130,28 @@
       closeModal();
     }
 
-    // Actualización en tiempo real + conteo local
+    // Actualización en tiempo real
     db.ref('timers').on('value', (snapshot) => {
       const data = snapshot.val() || {};
-
       buggies.forEach(color => {
         const timerEl = document.getElementById(`timer-${color}`);
         const statusEl = document.getElementById(`status-${color}`);
 
         if (data[color] && data[color].endTime) {
-          const endTime = data[color].endTime;
-          const updateTimer = () => {
-            const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
-            const min = Math.floor(remaining / 60);
-            const sec = remaining % 60;
-            timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
-
-            if (remaining <= 0) {
-              timerEl.textContent = "¡TIEMPO!";
-              statusEl.textContent = "Finalizado";
-              db.ref('timers/' + color).remove();
-            } else {
-              statusEl.textContent = "Corriendo";
-            }
-          };
-
-          updateTimer();
-          if (window[`interval_${color}`]) clearInterval(window[`interval_${color}`]);
-          window[`interval_${color}`] = setInterval(updateTimer, 1000);
+          const remaining = Math.max(0, Math.floor((data[color].endTime - Date.now()) / 1000));
+          const min = Math.floor(remaining / 60);
+          const sec = remaining % 60;
+          timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+          statusEl.textContent = remaining > 0 ? "Corriendo" : "Finalizado";
         } else {
           timerEl.textContent = "Listo";
           statusEl.textContent = "Disponible";
-          if (window[`interval_${color}`]) clearInterval(window[`interval_${color}`]);
         }
       });
     });
 
-    createCards();
+    // Iniciar
+    login();
   </script>
 </body>
 </html>
