@@ -16,8 +16,8 @@
     th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
     th { background: #ff3b00; color: white; }
     tr:hover { background: #252525; }
-    .active { background: #1e3a1e; font-weight: bold; }
-    .timer-live { font-size: 1.6rem; font-weight: 900; }
+    .active { background: #1e3a1e; }
+    .timer-live { font-size: 1.7rem; font-weight: bold; color: #4ade80; }
   </style>
 </head>
 <body>
@@ -40,7 +40,7 @@
 
   <!-- HISTORIAL COMPLETO -->
   <div class="section">
-    <h2 style="text-align:center; margin-bottom:15px;">📋 HISTORIAL COMPLETO</h2>
+    <h2 style="text-align:center; margin-bottom:15px;">📋 HISTORIAL COMPLETO DE ACTIVIDAD</h2>
     <table>
       <thead>
         <tr>
@@ -77,7 +77,7 @@
       });
     }
 
-    // ==================== TIMERS ACTIVOS EN TIEMPO REAL ====================
+    // ==================== TIMERS ACTIVOS (EN TIEMPO REAL) ====================
     db.ref('timers').on('value', (snapshot) => {
       const data = snapshot.val() || {};
       const tbody = document.getElementById('active-body');
