@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial de Activaciones - Buggycross</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Montserrat', sans-serif; 
+      background: #0a0a0a; 
+      color: white; 
+      padding: 20px; 
+    }
+    h1 { color: #ff3b00; text-align: center; margin-bottom: 10px; }
+    .subtitle { text-align: center; color: #aaa; margin-bottom: 30px; }
+    table { width: 100%; max-width: 1000px; margin: 0 auto; border-collapse: collapse; background: #1a1a1a; border-radius: 12px; overflow: hidden; }
+    th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
+    th { background: #ff3b00; color: white; }
+    tr:hover { background: #252525; }
+    .buggy-rojo { color: #ff5252; }
+    .buggy-verde { color: #4ade80; }
+    .buggy-azul { color: #60a5fa; }
+    .buggy-morado { color: #c084fc; }
+    .buggy-naranja { color: #fb923c; }
+    .container { max-width: 1100px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>HISTORIAL DE ACTIVACIONES</h1>
+    <p class="subtitle">Últimas 50 activaciones de timers</p>
+    <table id="history-table">
+      <thead>
+        <tr>
+          <th>Fecha y Hora</th>
+          <th>Buggy</th>
+          <th>Usuario</th>
+          <th>Duración</th>
+        </tr>
+      </thead>
+      <tbody id="history-body"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDGKDYHEIZKnoppP99TToagTZR24uqbjao",
+      authDomain: "buggycross-control.firebaseapp.com",
+      databaseURL: "https://buggycross-control-default-rtdb.firebaseio.com",
+      projectId: "buggycross-control",
+      storageBucket: "buggycross-control.firebasestorage.app",
+      messagingSenderId: "580647567200",
+      appId: "1:580647567200:web:dffc5a656c0b7b8bdd2805"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function formatDate(timestamp) {
+      const date = new Date(timestamp);
+      return date.toLocaleString('es-BO', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    }
+
+    function loadHistory() {
+      const tbody = document.getElementById('history-body');
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px;">Cargando historial...</td></tr>';
+
+      db.ref('logs').once('value', (snapshot) => {
+        const allLogs = [];
+        snapshot.forEach(buggySnap => {
+          const buggyName = buggySnap.key;
+          buggySnap.forEach(logSnap => {
+            const log = logSnap.val();
+            allLogs.push({
+              ...log,
+              buggy: buggyName,
+              key: logSnap.key
+            });
+          });
+        });
+
+        // Ordenar del más reciente al más antiguo
+        allLogs.sort((a, b) => b.time - a.time);
+
+        tbody.innerHTML = '';
+
+        allLogs.slice(0, 50).forEach(log => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${formatDate(log.time)}</td>
+            <td class="buggy-${log.buggy.toLowerCase()}"><strong>${log.buggy}</strong></td>
+            <td>${log.user}</td>
+            <td>${log.duration}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        if (allLogs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px;">Aún no hay registros</td></tr>';
+        }
+      });
+    }
+
+    // Cargar el historial al abrir la página
+    loadHistory();
+  </script>
+</body>
+</html>
