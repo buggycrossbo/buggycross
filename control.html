@@ -66,7 +66,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // ==================== USUARIOS ====================
     const users = {
       "ale": "aledv123",
       "juan": "roboto",
@@ -77,14 +76,11 @@
 
     function login() {
       const username = prompt("👤 Ingresa tu usuario:").toLowerCase().trim();
-      
       if (!users[username]) {
         alert("Usuario no encontrado");
         return login();
       }
-
       const password = prompt("🔑 Ingresa tu contraseña:");
-      
       if (password === users[username]) {
         currentUser = username;
         document.getElementById('current-user').textContent = `Usuario: ${username.toUpperCase()}`;
@@ -139,15 +135,36 @@
     function startTimer(minutes) {
       closeModal();
       const endTime = Date.now() + minutes * 60000;
+      
+      // Guardar timer activo
       db.ref('timers/' + currentBuggy).set({ endTime: endTime });
+
+      // Guardar en historial
+      const logEntry = {
+        time: Date.now(),
+        user: currentUser,
+        duration: minutes + " minutos",
+        action: "Activado"
+      };
+      db.ref('logs/' + currentBuggy).push(logEntry);
     }
 
     function cancelTimer() {
       db.ref('timers/' + currentBuggy).remove();
+      
+      // Guardar cancelación en historial
+      const logEntry = {
+        time: Date.now(),
+        user: currentUser,
+        duration: "Cancelado",
+        action: "Cancelado"
+      };
+      db.ref('logs/' + currentBuggy).push(logEntry);
+      
       closeModal();
     }
 
-    // Actualización en tiempo real + conteo local
+    // Actualización en tiempo real
     db.ref('timers').on('value', (snapshot) => {
       const data = snapshot.val() || {};
       buggies.forEach(color => {
@@ -155,33 +172,26 @@
         const statusEl = document.getElementById(`status-${color}`);
 
         if (data[color] && data[color].endTime) {
-          const endTime = data[color].endTime;
-          const updateTimer = () => {
-            const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
-            const min = Math.floor(remaining / 60);
-            const sec = remaining % 60;
-            timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+          const remaining = Math.max(0, Math.floor((data[color].endTime - Date.now()) / 1000));
+          const min = Math.floor(remaining / 60);
+          const sec = remaining % 60;
+          
+          timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
 
-            if (remaining <= 0) {
-              timerEl.textContent = "¡TIEMPO!";
-              statusEl.textContent = "Finalizado";
-              db.ref('timers/' + color).remove();
-            } else {
-              statusEl.textContent = "Corriendo";
-            }
-          };
-          updateTimer();
-          if (window[`interval_${color}`]) clearInterval(window[`interval_${color}`]);
-          window[`interval_${color}`] = setInterval(updateTimer, 1000);
+          if (remaining <= 0) {
+            timerEl.textContent = "¡TIEMPO!";
+            statusEl.textContent = "Finalizado";
+            db.ref('timers/' + color).remove();
+          } else {
+            statusEl.textContent = "Corriendo";
+          }
         } else {
           timerEl.textContent = "Listo";
           statusEl.textContent = "Disponible";
-          if (window[`interval_${color}`]) clearInterval(window[`interval_${color}`]);
         }
       });
     });
 
-    // Iniciar con login
     login();
   </script>
 </body>
