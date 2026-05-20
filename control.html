@@ -26,11 +26,13 @@
     }
     .timer { font-size: 3.5rem; margin: 15px 0; font-weight: 900; }
     .status { font-size: 1.1rem; margin-top: 8px; }
+    #current-user { color: #aaa; margin-bottom: 15px; font-size: 1.2rem; }
   </style>
 </head>
 <body>
 
   <h1>CONTROL DE TIEMPOS</h1>
+  <p id="current-user"></p>
   <div class="grid" id="grid"></div>
 
   <!-- Modal -->
@@ -64,6 +66,35 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // ==================== USUARIOS ====================
+    const users = {
+      "ale": "aledv123",
+      "juan": "roboto",
+      "deni": "unicornio"
+    };
+
+    let currentUser = "";
+
+    function login() {
+      const username = prompt("👤 Ingresa tu usuario:").toLowerCase().trim();
+      
+      if (!users[username]) {
+        alert("Usuario no encontrado");
+        return login();
+      }
+
+      const password = prompt("🔑 Ingresa tu contraseña:");
+      
+      if (password === users[username]) {
+        currentUser = username;
+        document.getElementById('current-user').textContent = `Usuario: ${username.toUpperCase()}`;
+        createCards();
+      } else {
+        alert("❌ Contraseña incorrecta");
+        login();
+      }
+    }
+
     const buggies = ["Rojo", "Verde", "Azul", "Morado", "Naranja"];
 
     function createCards() {
@@ -94,7 +125,6 @@
       currentBuggy = color;
       document.getElementById('modal-title').textContent = color;
       
-      // Mostrar botón cancelar si hay timer activo
       db.ref('timers/' + color).once('value', (snap) => {
         document.getElementById('cancel-btn').style.display = snap.exists() ? 'block' : 'none';
       });
@@ -120,7 +150,6 @@
     // Actualización en tiempo real + conteo local
     db.ref('timers').on('value', (snapshot) => {
       const data = snapshot.val() || {};
-
       buggies.forEach(color => {
         const timerEl = document.getElementById(`timer-${color}`);
         const statusEl = document.getElementById(`status-${color}`);
@@ -141,7 +170,6 @@
               statusEl.textContent = "Corriendo";
             }
           };
-
           updateTimer();
           if (window[`interval_${color}`]) clearInterval(window[`interval_${color}`]);
           window[`interval_${color}`] = setInterval(updateTimer, 1000);
@@ -153,7 +181,8 @@
       });
     });
 
-    createCards();
+    // Iniciar con login
+    login();
   </script>
 </body>
 </html>
