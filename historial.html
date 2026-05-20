@@ -17,23 +17,34 @@
     }
     h1 { color: #ff3b00; text-align: center; margin-bottom: 10px; }
     .subtitle { text-align: center; color: #aaa; margin-bottom: 30px; }
-    table { width: 100%; max-width: 1000px; margin: 0 auto; border-collapse: collapse; background: #1a1a1a; border-radius: 12px; overflow: hidden; }
-    th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
-    th { background: #ff3b00; color: white; }
-    tr:hover { background: #252525; }
-    .buggy-rojo { color: #ff5252; }
-    .buggy-verde { color: #4ade80; }
-    .buggy-azul { color: #60a5fa; }
-    .buggy-morado { color: #c084fc; }
-    .buggy-naranja { color: #fb923c; }
     .container { max-width: 1100px; margin: 0 auto; }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      background: #1a1a1a; 
+      border-radius: 12px; 
+      overflow: hidden; 
+    }
+    th, td { 
+      padding: 16px; 
+      text-align: left; 
+      border-bottom: 1px solid #333; 
+    }
+    th { 
+      background: #ff3b00; 
+      color: white; 
+      position: sticky;
+      top: 0;
+    }
+    tr:hover { background: #252525; }
+    .buggy { font-weight: bold; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>HISTORIAL DE ACTIVACIONES</h1>
-    <p class="subtitle">Últimas 50 activaciones de timers</p>
-    <table id="history-table">
+    <p class="subtitle">Registros de quién activó cada timer</p>
+    <table>
       <thead>
         <tr>
           <th>Fecha y Hora</th>
@@ -62,11 +73,11 @@
 
     function formatDate(timestamp) {
       const date = new Date(timestamp);
-      return date.toLocaleString('es-BO', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
+      return date.toLocaleString('es-BO', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric', 
+        hour: '2-digit', 
         minute: '2-digit',
         second: '2-digit'
       });
@@ -74,18 +85,20 @@
 
     function loadHistory() {
       const tbody = document.getElementById('history-body');
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px;">Cargando historial...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:60px;">Cargando historial...</td></tr>';
 
       db.ref('logs').once('value', (snapshot) => {
         const allLogs = [];
+
         snapshot.forEach(buggySnap => {
           const buggyName = buggySnap.key;
           buggySnap.forEach(logSnap => {
             const log = logSnap.val();
             allLogs.push({
-              ...log,
+              time: log.time || logSnap.key,
               buggy: buggyName,
-              key: logSnap.key
+              user: log.user || "Desconocido",
+              duration: log.duration || "N/A"
             });
           });
         });
@@ -95,24 +108,25 @@
 
         tbody.innerHTML = '';
 
-        allLogs.slice(0, 50).forEach(log => {
+        if (allLogs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:60px;">Aún no hay registros de activaciones</td></tr>';
+          return;
+        }
+
+        allLogs.forEach(log => {
           const row = document.createElement('tr');
           row.innerHTML = `
             <td>${formatDate(log.time)}</td>
-            <td class="buggy-${log.buggy.toLowerCase()}"><strong>${log.buggy}</strong></td>
-            <td>${log.user}</td>
+            <td class="buggy">${log.buggy}</td>
+            <td><strong>${log.user}</strong></td>
             <td>${log.duration}</td>
           `;
           tbody.appendChild(row);
         });
-
-        if (allLogs.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px;">Aún no hay registros</td></tr>';
-        }
       });
     }
 
-    // Cargar el historial al abrir la página
+    // Cargar historial automáticamente
     loadHistory();
   </script>
 </body>
