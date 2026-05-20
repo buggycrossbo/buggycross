@@ -23,6 +23,22 @@
       border-radius: 8px;
       color: white;
     }
+    .address-box {
+      background: #1a1a1a;
+      padding: 25px;
+      border-radius: 12px;
+      margin: 30px auto;
+      max-width: 650px;
+      text-align: left;
+      border-left: 5px solid #ff3b00;
+    }
+    .map-container {
+      margin: 30px auto;
+      max-width: 650px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
   </style>
 </head>
 <body>
@@ -53,6 +69,27 @@
     <strong>Sábados y Domingos:</strong> 09:00 - 17:30<br>
     <strong>Lunes y Martes:</strong> Cerrado</p>
 
+    <!-- DIRECCIÓN -->
+    <div class="address-box">
+      <strong>📍 Nuestra pista se encuentra en:</strong><br><br>
+      <!-- Agrega aquí tu dirección exacta si quieres -->
+      Carretera [Nombre de la vía], Km [número]<br>
+      [Zona / Cercanías], Bolivia
+    </div>
+
+    <!-- MAPA DE GOOGLE -->
+    <div class="map-container">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3009.439560690891!2d-66.114823!3d-17.380088999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTfCsDIyJzQ4LjMiUyA2NsKwMDYnNTMuNCJX!5e1!3m2!1ses!2sbo!4v1779310872560!5m2!1ses!2sbo" 
+        width="100%" 
+        height="450" 
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+
     <form action="https://formspree.io/f/xjglllva" method="POST" class="contact-form" id="reservaForm">
       <input type="text" name="nombre" placeholder="Tu nombre completo" required>
       <input type="email" name="email" placeholder="Tu correo electrónico" required>
@@ -77,23 +114,19 @@
       
       const today = new Date().toISOString().split('T')[0];
       fechaInput.setAttribute('min', today);
-
+      
       fechaInput.addEventListener('change', function() {
         const selectedDate = new Date(this.value);
-        const day = selectedDate.getDay(); 
-
-        console.log("Día seleccionado:", day); // Para depuración
-
-        if (day === 0 || day === 1) { 
+        const day = selectedDate.getDay();
+        if (day === 0 || day === 1) {
           alert("Lo sentimos, no trabajamos los lunes ni martes.");
           this.value = '';
           return;
         }
-
-        if (day >= 3 && day <= 5) { // Miércoles (3) a Viernes (5)
+        if (day >= 3 && day <= 5) {
           horaInput.setAttribute('min', '15:00');
           horaInput.setAttribute('max', '18:30');
-        } else { // Sábado (6) y Domingo (0)
+        } else {
           horaInput.setAttribute('min', '09:00');
           horaInput.setAttribute('max', '17:30');
         }
