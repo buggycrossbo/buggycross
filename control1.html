@@ -14,23 +14,23 @@
       background: #0a0a0a; 
       color: white; 
       text-align: center; 
-      padding: 8px; 
+      padding: 6px; 
       height: 100vh;
       overflow: hidden;
     }
     h1 { 
       color: #ff3b00; 
-      margin: 5px 0 10px; 
-      font-size: 1.7rem; 
+      margin: 4px 0 8px; 
+      font-size: 1.65rem; 
     }
     .grid { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr); 
-      gap: 8px; 
-      height: calc(100vh - 60px);
+      gap: 7px; 
+      height: calc(100vh - 52px);
     }
     .buggy-card {
-      padding: 10px 8px;
+      padding: 8px 6px;
       border-radius: 10px;
       color: white;
       font-weight: bold;
@@ -40,25 +40,25 @@
       cursor: pointer;
     }
     .lap-count { 
-      font-size: 3rem; 
+      font-size: 2.9rem; 
       font-weight: 900; 
-      margin: 4px 0; 
+      margin: 3px 0; 
     }
     .btn-vuelta {
       background: #ff3b00;
       color: white;
       border: none;
-      padding: 9px;
-      font-size: 1rem;
-      border-radius: 8px;
-      margin-top: 6px;
+      padding: 8px;
+      font-size: 0.98rem;
+      border-radius: 7px;
+      margin-top: 5px;
       cursor: pointer;
     }
     .btn-reset {
       background: #555;
-      margin-top: 5px;
+      margin-top: 4px;
       padding: 5px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
   </style>
 </head>
@@ -92,9 +92,9 @@
         card.style.backgroundColor = getColor(color);
         
         card.innerHTML = `
-          <div style="font-size:1.45rem;">${color}</div>
+          <div style="font-size:1.4rem;">${color}</div>
           <div class="lap-count" id="laps-${color}">0</div>
-          <div style="font-size:0.85rem; margin-bottom:6px;">Vueltas</div>
+          <div style="font-size:0.82rem;">Vueltas</div>
           <button class="btn-vuelta" onclick="addLap('${color}')">+1 VUELTA</button>
           <button class="btn-reset" onclick="resetLaps('${color}')">Reiniciar</button>
         `;
