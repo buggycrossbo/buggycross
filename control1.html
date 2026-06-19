@@ -20,14 +20,14 @@
     }
     h1 { 
       color: #ff3b00; 
-      margin: 4px 0 8px; 
-      font-size: 1.55rem; 
+      margin: 5px 0 8px; 
+      font-size: 1.6rem; 
     }
     .grid { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr); 
       gap: 6px; 
-      height: calc(100vh - 50px);
+      height: calc(100vh - 52px);
     }
     .buggy-card {
       padding: 6px 5px;
@@ -37,20 +37,20 @@
       flex-direction: column;
       justify-content: space-between;
       cursor: pointer;
-      min-height: 158px;
+      min-height: 162px;
     }
     .lap-count { 
-      font-size: 2.65rem; 
+      font-size: 2.75rem; 
       font-weight: 900; 
-      margin: 3px 0; 
+      margin: 2px 0; 
     }
     .btn-vuelta {
       background: #ff3b00;
       color: white;
       border: none;
-      padding: 7px;
-      font-size: 0.95rem;
-      border-radius: 6px;
+      padding: 8px;
+      font-size: 0.97rem;
+      border-radius: 7px;
       margin: 3px 0;
       cursor: pointer;
     }
@@ -59,8 +59,8 @@
       color: white;
       border: none;
       padding: 5px;
-      font-size: 0.78rem;
-      border-radius: 6px;
+      font-size: 0.8rem;
+      border-radius: 7px;
       cursor: pointer;
     }
   </style>
@@ -97,7 +97,7 @@
         card.innerHTML = `
           <button class="btn-vuelta" onclick="addLap('${color}')">+1 VUELTA</button>
           <div style="text-align:center;">
-            <div style="font-size:1.3rem;">${color}</div>
+            <div style="font-size:1.32rem;">${color}</div>
             <div class="lap-count" id="laps-${color}">0</div>
             <div style="font-size:0.8rem;">Vueltas</div>
           </div>
