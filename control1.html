@@ -21,17 +21,17 @@
     h1 { 
       color: #ff3b00; 
       margin: 5px 0 8px; 
-      font-size: 1.55rem; 
+      font-size: 1.6rem; 
     }
     .grid { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr); 
-      gap: 6px; 
-      height: calc(100vh - 50px);
+      gap: 8px; 
+      height: calc(100vh - 55px);
     }
     .buggy-card {
-      padding: 6px 6px 4px;
-      border-radius: 9px;
+      padding: 8px 8px;
+      border-radius: 10px;
       color: white;
       font-weight: bold;
       display: flex;
@@ -40,24 +40,25 @@
       cursor: pointer;
     }
     .lap-count { 
-      font-size: 2.75rem; 
+      font-size: 3rem; 
       font-weight: 900; 
-      margin: 3px 0 2px; 
+      margin: 4px 0 6px; 
     }
     .btn-vuelta {
       background: #ff3b00;
       color: white;
       border: none;
-      padding: 8px;
-      font-size: 0.95rem;
-      border-radius: 7px;
-      margin: 4px 0;
+      padding: 10px;
+      font-size: 1.05rem;
+      border-radius: 8px;
+      margin-bottom: 6px;
       cursor: pointer;
     }
     .btn-reset {
       background: #555;
-      padding: 5px;
-      font-size: 0.8rem;
+      padding: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -79,7 +80,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const buggies = ["Rojo", "Verde", "Azul", "Morado", "Naranja"];
+    const buggies = ["Verde", "Azul", "Morado", "Naranja"];
 
     function createCards() {
       const grid = document.getElementById('grid');
@@ -91,10 +92,10 @@
         card.style.backgroundColor = getColor(color);
         
         card.innerHTML = `
-          <div style="font-size:1.35rem;">${color}</div>
-          <div class="lap-count" id="laps-${color}">0</div>
-          <div style="font-size:0.8rem;">Vueltas</div>
           <button class="btn-vuelta" onclick="addLap('${color}')">+1 VUELTA</button>
+          <div style="font-size:1.4rem; margin:6px 0;">${color}</div>
+          <div class="lap-count" id="laps-${color}">0</div>
+          <div style="font-size:0.85rem;">Vueltas</div>
           <button class="btn-reset" onclick="resetLaps('${color}')">Reiniciar</button>
         `;
         grid.appendChild(card);
@@ -102,33 +103,4 @@
     }
 
     function getColor(c) {
-      const map = {Rojo:"#c62828", Verde:"#2e7d32", Azul:"#1565c0", Morado:"#6a1b9a", Naranja:"#ef6c00"};
-      return map[c];
-    }
-
-    function addLap(color) {
-      const ref = db.ref('vueltas/' + color);
-      ref.once('value', (snap) => {
-        let current = snap.val() || 0;
-        ref.set(current + 1);
-      });
-    }
-
-    function resetLaps(color) {
-      if (confirm(`¿Reiniciar ${color}?`)) {
-        db.ref('vueltas/' + color).set(0);
-      }
-    }
-
-    db.ref('vueltas').on('value', (snapshot) => {
-      const data = snapshot.val() || {};
-      buggies.forEach(color => {
-        const lapsEl = document.getElementById(`laps-${color}`);
-        if (lapsEl) lapsEl.textContent = data[color] || 0;
-      });
-    });
-
-    createCards();
-  </script>
-</body>
-</html>
+      const map = {Verde:"#2e7d32", Azul:"#1565c0", Morado:"#6a1b9a", Naranja:"#ef6c00"};
