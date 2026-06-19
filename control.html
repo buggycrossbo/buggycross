@@ -33,18 +33,23 @@
   <div class="grid" id="grid"></div>
 
   <!-- Modal -->
-  <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); align-items:center; justify-content:center;">
-    <div style="background:#1a1a1a; padding:30px; border-radius:15px; text-align:center; max-width:380px;">
-      <h2 id="modal-title" style="margin-bottom:20px;">Buggy Rojo</h2>
-      <button onclick="startTimer(5)" style="padding:15px 30px; margin:10px; font-size:1.1rem; background:#ff3b00; border:none; border-radius:8px; color:white; cursor:pointer;">5 Minutos</button>
-      <button onclick="startTimer(10)" style="padding:15px 30px; margin:10px; font-size:1.1rem; background:#ff3b00; border:none; border-radius:8px; color:white; cursor:pointer;">10 Minutos</button>
-      <button id="cancel-btn" onclick="cancelTimer()" style="display:none; padding:12px 25px; margin:10px; background:#666; border:none; border-radius:8px; color:white; cursor:pointer;">Cancelar Timer</button>
-      <button onclick="closeModal()" style="margin-top:15px; padding:10px 20px; background:#333; border:none; border-radius:8px; color:white;">Cerrar</button>
+  <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); align-items:center; justify-content:center; z-index:1000;">
+    <div style="background:#1a1a1a; padding:40px; border-radius:15px; width:90%; max-width:420px;">
+      <h2 id="modal-title" style="margin-bottom:30px; color:#ff3b00;">Seleccionar tiempo</h2>
+     
+      <button onclick="startTimer(5)" style="background:#ff3b00; padding:18px; margin:12px; font-size:1.4rem; width:85%; border:none; border-radius:8px;">5 Minutos</button>
+      <button onclick="startTimer(10)" style="background:#ff3b00; padding:18px; margin:12px; font-size:1.4rem; width:85%; border:none; border-radius:8px;">10 Minutos</button>
+     
+      <button id="cancel-btn" onclick="cancelTimer()"
+              style="background:#d32f2f; padding:16px; margin:20px 12px 10px; font-size:1.3rem; width:85%; border:none; border-radius:8px; display:none;">
+        ❌ CANCELAR TIMER
+      </button>
+     
+      <button onclick="closeModal()" style="background:#555; padding:15px; margin-top:10px; font-size:1.1rem; width:85%; border:none; border-radius:8px;">Cerrar</button>
     </div>
   </div>
 
   <script>
-    // ==================== CONFIGURACIÓN FIREBASE ====================
     const firebaseConfig = {
       apiKey: "AIzaSyDGKDYHEIZKnoppP99TToagTZR24uqbjao",
       authDomain: "buggycross-control.firebaseapp.com",
@@ -54,24 +59,20 @@
       messagingSenderId: "580647567200",
       appId: "1:580647567200:web:dffc5a656c0b7b8bdd2805"
     };
-
-    const app = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const buggies = ["rojo", "verde", "azul", "morado", "naranja"];
+    const buggies = ["Rojo", "Verde", "Azul", "Morado", "Naranja"];
 
     function createCards() {
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
       buggies.forEach(color => {
         const card = document.createElement('div');
-        card.className = `buggy-card`;
-        card.style.background = color === 'rojo' ? '#c00' : 
-                               color === 'verde' ? '#0a0' : 
-                               color === 'azul' ? '#00a' : 
-                               color === 'morado' ? '#a0a' : '#f80';
+        card.className = 'buggy-card';
+        card.style.backgroundColor = getColor(color);
         card.innerHTML = `
-          <div style="font-size:2rem; margin-bottom:15px;">${color.toUpperCase()}</div>
+          <div>${color}</div>
           <div class="timer" id="timer-${color}">Listo</div>
           <div class="status" id="status-${color}">Disponible</div>
         `;
@@ -80,13 +81,21 @@
       });
     }
 
-    let currentBuggy = null;
+    function getColor(c) {
+      const map = {Rojo:"#c62828", Verde:"#2e7d32", Azul:"#1565c0", Morado:"#6a1b9a", Naranja:"#ef6c00"};
+      return map[c];
+    }
+
+    let currentBuggy = "";
 
     function openModal(color) {
       currentBuggy = color;
-      document.getElementById('modal-title').textContent = `Buggy ${color.toUpperCase()}`;
+      document.getElementById('modal-title').textContent = color;
+     
+      db.ref('timers/' + color).once('value', (snap) => {
+        document.getElementById('cancel-btn').style.display = snap.exists() ? 'block' : 'none';
+      });
       document.getElementById('modal').style.display = 'flex';
-      document.getElementById('cancel-btn').style.display = 'none';
     }
 
     function closeModal() {
@@ -94,28 +103,22 @@
     }
 
     function startTimer(minutes) {
-      const endTime = Date.now() + minutes * 60 * 1000;
-      db.ref('timers/' + currentBuggy).set({
-        endTime: endTime,
-        duration: minutes
-      });
       closeModal();
+      const endTime = Date.now() + minutes * 60000;
+      db.ref('timers/' + currentBuggy).set({ endTime: endTime });
     }
 
     function cancelTimer() {
-      if (currentBuggy) {
-        db.ref('timers/' + currentBuggy).remove();
-      }
+      db.ref('timers/' + currentBuggy).remove();
       closeModal();
     }
 
-    // Listener en tiempo real
+    // Actualización en tiempo real + conteo local
     db.ref('timers').on('value', (snapshot) => {
       const data = snapshot.val() || {};
       buggies.forEach(color => {
         const timerEl = document.getElementById(`timer-${color}`);
         const statusEl = document.getElementById(`status-${color}`);
-
         if (data[color] && data[color].endTime) {
           const endTime = data[color].endTime;
           const updateTimer = () => {
@@ -123,7 +126,6 @@
             const min = Math.floor(remaining / 60);
             const sec = remaining % 60;
             timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
-            
             if (remaining <= 0) {
               timerEl.textContent = "¡TIEMPO!";
               statusEl.textContent = "Finalizado";
@@ -143,6 +145,7 @@
       });
     });
 
+    // Iniciar directamente sin login
     createCards();
   </script>
 </body>
