@@ -14,26 +14,23 @@
       background: #0a0a0a; 
       color: white; 
       text-align: center; 
-      padding: 15px; 
+      padding: 10px; 
       height: 100vh;
-      display: flex;
-      flex-direction: column;
+      overflow: hidden;
     }
     h1 { 
       color: #ff3b00; 
-      margin: 10px 0 15px; 
-      font-size: 2.2rem; 
+      margin: 8px 0 12px; 
+      font-size: 1.9rem; 
     }
     .grid { 
       display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
-      gap: 12px; 
-      flex: 1;
-      max-width: 1600px; 
-      margin: 0 auto; 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 10px; 
+      height: calc(100vh - 70px);
     }
     .buggy-card {
-      padding: 20px 15px;
+      padding: 15px 10px;
       border-radius: 12px;
       color: white;
       font-weight: bold;
@@ -42,29 +39,27 @@
       justify-content: center;
       cursor: pointer;
       transition: 0.2s;
-      min-height: 180px;
     }
-    .buggy-card:hover { transform: scale(1.03); }
     .lap-count { 
-      font-size: 3.8rem; 
+      font-size: 3.4rem; 
       font-weight: 900; 
-      margin: 8px 0; 
+      margin: 6px 0; 
     }
     .btn-vuelta {
       background: #ff3b00;
       color: white;
       border: none;
-      padding: 14px;
-      font-size: 1.2rem;
+      padding: 12px;
+      font-size: 1.1rem;
       border-radius: 8px;
-      margin-top: 10px;
+      margin-top: 8px;
       cursor: pointer;
     }
     .btn-reset {
       background: #555;
-      margin-top: 8px;
-      padding: 8px;
-      font-size: 0.95rem;
+      margin-top: 6px;
+      padding: 6px;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -98,9 +93,9 @@
         card.style.backgroundColor = getColor(color);
         
         card.innerHTML = `
-          <div style="font-size:1.8rem;">${color}</div>
+          <div style="font-size:1.6rem;">${color}</div>
           <div class="lap-count" id="laps-${color}">0</div>
-          <div style="font-size:1rem; margin-bottom:8px;">Vueltas</div>
+          <div style="font-size:0.95rem;">Vueltas</div>
           <button class="btn-vuelta" onclick="addLap('${color}')">+1 VUELTA</button>
           <button class="btn-reset" onclick="resetLaps('${color}')">Reiniciar</button>
         `;
@@ -122,7 +117,7 @@
     }
 
     function resetLaps(color) {
-      if (confirm(`¿Reiniciar vueltas del ${color}?`)) {
+      if (confirm(`¿Reiniciar ${color}?`)) {
         db.ref('vueltas/' + color).set(0);
       }
     }
