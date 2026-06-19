@@ -14,51 +14,54 @@
       background: #0a0a0a; 
       color: white; 
       text-align: center; 
-      padding: 5px; 
+      padding: 6px; 
       height: 100vh;
       overflow: hidden;
     }
     h1 { 
       color: #ff3b00; 
-      margin: 4px 0 8px; 
-      font-size: 1.55rem; 
+      margin: 5px 0 10px; 
+      font-size: 1.6rem; 
     }
     .grid { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr); 
-      gap: 6px; 
-      height: calc(100vh - 50px);
+      gap: 7px; 
+      height: calc(100vh - 55px);
     }
     .buggy-card {
-      padding: 6px 5px;
-      border-radius: 9px;
+      padding: 8px 6px;
+      border-radius: 10px;
       color: white;
-      font-weight: bold;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
       cursor: pointer;
+      min-height: 165px;
     }
     .lap-count { 
-      font-size: 2.6rem; 
+      font-size: 2.8rem; 
       font-weight: 900; 
-      margin: 2px 0; 
+      margin: 4px 0; 
     }
     .btn-vuelta {
       background: #ff3b00;
       color: white;
       border: none;
-      padding: 7px;
-      font-size: 0.92rem;
-      border-radius: 6px;
-      margin-top: 4px;
+      padding: 9px;
+      font-size: 1rem;
+      border-radius: 7px;
+      margin: 4px 0;
       cursor: pointer;
     }
     .btn-reset {
       background: #555;
-      margin-top: 4px;
-      padding: 4px;
-      font-size: 0.75rem;
+      color: white;
+      border: none;
+      padding: 6px;
+      font-size: 0.82rem;
+      border-radius: 7px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -92,10 +95,12 @@
         card.style.backgroundColor = getColor(color);
         
         card.innerHTML = `
-          <div style="font-size:1.3rem;">${color}</div>
-          <div class="lap-count" id="laps-${color}">0</div>
-          <div style="font-size:0.78rem;">Vueltas</div>
           <button class="btn-vuelta" onclick="addLap('${color}')">+1 VUELTA</button>
+          <div>
+            <div style="font-size:1.35rem;">${color}</div>
+            <div class="lap-count" id="laps-${color}">0</div>
+            <div style="font-size:0.85rem;">Vueltas</div>
+          </div>
           <button class="btn-reset" onclick="resetLaps('${color}')">Reiniciar</button>
         `;
         grid.appendChild(card);
